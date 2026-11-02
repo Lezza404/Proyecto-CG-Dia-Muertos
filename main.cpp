@@ -181,6 +181,7 @@ int main() {
     // ------------------------------------------------------------------
     Model Piso("resources/objects/Piso/Piso.obj");
     Model Tumba("resources/objects/Tumba/Tumba.obj");
+    Model Tumba2("resources/objects/Tumba2/Tumba2.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -278,6 +279,14 @@ int main() {
         modelOp = glm::scale(modelOp, glm::vec3(1.0f)); 
         staticShader.setMat4("model", modelOp);
         Tumba.Draw(staticShader);
+
+
+        //Tumba2
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(50.0f, 0.0f, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
 
 
         // Skybox
