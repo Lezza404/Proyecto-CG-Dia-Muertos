@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
-# File Created: 01.11.2026 23:11:35
+# File Created: 02.11.2026 00:06:22
 
-newmtl Material__26
+newmtl Material__34
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
@@ -30,7 +30,7 @@ newmtl 02___Default
 	map_Ka Pieda_Hormigon.jpg
 	map_Kd Pieda_Hormigon.jpg
 
-newmtl 03___Default
+newmtl Material__35
 	Ns 10.0000
 	Ni 1.5000
 	d 1.0000
