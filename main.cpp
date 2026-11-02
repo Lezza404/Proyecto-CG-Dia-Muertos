@@ -173,12 +173,15 @@ int main() {
     Skybox skybox = Skybox(faces);
 
     skyboxShader.use();
+
     skyboxShader.setInt("skybox", 0);
 
     // ------------------------------------------------------------------
     // Carga de modelos del escenario
     // ------------------------------------------------------------------
-    Model piso("resources/objects/piso/piso.obj");
+    Model Piso("resources/objects/Piso/Piso.obj");
+    Model Tumba("resources/objects/Tumba/Tumba.obj");
+
 
     // Inicialización de KeyFrames en cero
     for (int i = 0; i < MAX_FRAMES; i++) {
@@ -264,15 +267,26 @@ int main() {
         // Dibujo del Escenario
         // ------------------------------------------------------------------
         // Piso base
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.75f, 0.0f));
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         modelOp = glm::scale(modelOp, glm::vec3(0.2f));
         staticShader.setMat4("model", modelOp);
-        piso.Draw(staticShader);
+        Piso.Draw(staticShader);
 
-        // Dibujar Skybox al final
+
+        //Tumba
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); 
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f)); 
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
+
+
+        // Skybox
         skyboxShader.use();
-        skybox.Draw(skyboxShader, viewOp, projectionOp, camera);
+        glm::mat4 skyboxView = glm::rotate(viewOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        skybox.Draw(skyboxShader, skyboxView, projectionOp, camera);
 
+
+        
         // Limitador de Framerate a 60 FPS
         deltaTime = SDL_GetTicks() - lastFrame;
         if (deltaTime < LOOP_TIME) {
