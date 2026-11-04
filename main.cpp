@@ -267,26 +267,53 @@ int main() {
         // ------------------------------------------------------------------
         // Dibujo del Escenario
         // ------------------------------------------------------------------
-        // Piso base
+        // Piso 
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(0.2f));
+        modelOp = glm::scale(modelOp, glm::vec3(0.4f)); 
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
+        
+
+        // Distribución de las tumbas
+        glm::vec3 posicionesTumba1[] = {
+            glm::vec3(-250.0f, 0.0f, -250.0f), glm::vec3(0.0f, 0.0f, -250.0f), glm::vec3(250.0f, 0.0f, -250.0f),
+            glm::vec3(-125.0f, 0.0f, -100.0f), glm::vec3(125.0f, 0.0f, -100.0f),
+            glm::vec3(-250.0f, 0.0f,   50.0f), glm::vec3(0.0f, 0.0f,   50.0f), glm::vec3(250.0f, 0.0f,   50.0f),
+            glm::vec3(-125.0f, 0.0f,  200.0f), glm::vec3(125.0f, 0.0f,  200.0f)
+        };
+
+        glm::vec3 posicionesTumba2[] = {
+            glm::vec3(-125.0f, 0.0f, -250.0f), glm::vec3(125.0f, 0.0f, -250.0f),
+            glm::vec3(-250.0f, 0.0f, -100.0f), glm::vec3(0.0f, 0.0f, -100.0f), glm::vec3(250.0f, 0.0f, -100.0f),
+            glm::vec3(-125.0f, 0.0f,   50.0f), glm::vec3(125.0f, 0.0f,   50.0f),
+            glm::vec3(-250.0f, 0.0f,  200.0f), glm::vec3(0.0f, 0.0f,  200.0f), glm::vec3(250.0f, 0.0f,  200.0f)
+        };
 
 
-        //Tumba
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); 
-        modelOp = glm::scale(modelOp, glm::vec3(1.0f)); 
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Tumba 1 
+        for (int i = 0; i < 10; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba1[i]);
+            modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+            staticShader.setMat4("model", modelOp);
+            Tumba.Draw(staticShader);
+        }
 
 
-        //Tumba2
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(50.0f, 0.0f, 0.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
+        // Tumba 2 
+        for (int i = 0; i < 10; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba2[i]);
+
+            if (i % 2 == 0) {
+                modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            }
+            else {
+                modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            }
+
+            modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+            staticShader.setMat4("model", modelOp);
+            Tumba2.Draw(staticShader);
+        }
 
 
         // Skybox
