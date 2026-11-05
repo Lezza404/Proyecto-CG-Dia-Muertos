@@ -182,6 +182,7 @@ int main() {
     Model Piso("resources/objects/Piso/Piso.obj");
     Model Tumba("resources/objects/Tumba/Tumba.obj");
     Model Tumba2("resources/objects/Tumba2/Tumba2.obj");
+    Model Tumba3("resources/objects/Tumba3/Tumba3.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -212,39 +213,48 @@ int main() {
         staticShader.use();
         staticShader.setVec3("viewPos", camera.Position);
 
-        // 1. Luz Direccional (Luz ambiental nocturna suave para ver todo el escenario)
+        // Luz Direccional
         staticShader.setVec3("dirLight.direction", lightDirection);
-        staticShader.setVec3("dirLight.ambient", glm::vec3(0.25f, 0.25f, 0.35f));
-        staticShader.setVec3("dirLight.diffuse", glm::vec3(0.35f, 0.35f, 0.45f));
+        staticShader.setVec3("dirLight.ambient", glm::vec3(0.18f, 0.18f, 0.25f));
+        staticShader.setVec3("dirLight.diffuse", glm::vec3(0.25f, 0.25f, 0.35f));
         staticShader.setVec3("dirLight.specular", glm::vec3(0.1f, 0.1f, 0.1f));
 
-        // 2. Luz Puntual 0 (Tono cálido naranja/amarillo tipo veladora en el origen)
-        staticShader.setVec3("pointLight[0].position", lightPosition);
-        staticShader.setVec3("pointLight[0].ambient", glm::vec3(0.3f, 0.15f, 0.0f));
-        staticShader.setVec3("pointLight[0].diffuse", glm::vec3(1.0f, 0.55f, 0.1f));
-        staticShader.setVec3("pointLight[0].specular", glm::vec3(1.0f, 0.55f, 0.1f));
-        staticShader.setFloat("pointLight[0].constant", 1.0f);
-        staticShader.setFloat("pointLight[0].linear", 0.009f);
-        staticShader.setFloat("pointLight[0].quadratic", 0.00032f);
+        // Vela 
+        float vela_constant = 1.0f;
+        float vela_linear = 0.009f;
+        float vela_quadratic = 0.00032f;
+        glm::vec3 vela_ambient = glm::vec3(0.05f, 0.02f, 0.0f);
+        glm::vec3 vela_diffuse = glm::vec3(0.6f, 0.3f, 0.05f); // Tono cálido
+        glm::vec3 vela_specular = glm::vec3(0.2f, 0.1f, 0.0f);
 
-        // Luces puntuales 1 y 2 apagadas por ahora (listas para más zonas de ofrendas)
-        staticShader.setVec3("pointLight[1].position", glm::vec3(0.0f, 0.0f, 0.0f));
-        staticShader.setVec3("pointLight[1].ambient", glm::vec3(0.0f));
-        staticShader.setVec3("pointLight[1].diffuse", glm::vec3(0.0f));
-        staticShader.setVec3("pointLight[1].specular", glm::vec3(0.0f));
-        staticShader.setFloat("pointLight[1].constant", 1.0f);
-        staticShader.setFloat("pointLight[1].linear", 0.009f);
-        staticShader.setFloat("pointLight[1].quadratic", 0.00032f);
+        // Luz Puntual 0 
+        staticShader.setVec3("pointLight[0].position", glm::vec3(0.0f, 12.0f, -250.0f));
+        staticShader.setVec3("pointLight[0].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[0].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[0].specular", vela_specular);
+        staticShader.setFloat("pointLight[0].constant", vela_constant);
+        staticShader.setFloat("pointLight[0].linear", vela_linear);
+        staticShader.setFloat("pointLight[0].quadratic", vela_quadratic);
 
-        staticShader.setVec3("pointLight[2].position", glm::vec3(0.0f, 0.0f, 0.0f));
-        staticShader.setVec3("pointLight[2].ambient", glm::vec3(0.0f));
-        staticShader.setVec3("pointLight[2].diffuse", glm::vec3(0.0f));
-        staticShader.setVec3("pointLight[2].specular", glm::vec3(0.0f));
-        staticShader.setFloat("pointLight[2].constant", 1.0f);
-        staticShader.setFloat("pointLight[2].linear", 0.009f);
-        staticShader.setFloat("pointLight[2].quadratic", 0.00032f);
+        // Luz Puntual 1 
+        staticShader.setVec3("pointLight[1].position", glm::vec3(-250.0f, 12.0f, 200.0f));
+        staticShader.setVec3("pointLight[1].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[1].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[1].specular", vela_specular);
+        staticShader.setFloat("pointLight[1].constant", vela_constant);
+        staticShader.setFloat("pointLight[1].linear", vela_linear);
+        staticShader.setFloat("pointLight[1].quadratic", vela_quadratic);
 
-        // 3. SpotLight apagada (para no manchar la escena de amarillo)
+        // Luz Puntual 2 
+        staticShader.setVec3("pointLight[2].position", glm::vec3(250.0f, 12.0f, -250.0f));
+        staticShader.setVec3("pointLight[2].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[2].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[2].specular", vela_specular);
+        staticShader.setFloat("pointLight[2].constant", vela_constant);
+        staticShader.setFloat("pointLight[2].linear", vela_linear);
+        staticShader.setFloat("pointLight[2].quadratic", vela_quadratic);
+
+        // SpotLight 
         staticShader.setVec3("spotLight[0].position", glm::vec3(camera.Position));
         staticShader.setVec3("spotLight[0].direction", glm::vec3(camera.Front));
         staticShader.setVec3("spotLight[0].ambient", glm::vec3(0.0f));
@@ -264,34 +274,48 @@ int main() {
         staticShader.setMat4("projection", projectionOp);
         staticShader.setMat4("view", viewOp);
 
+
+        // Transformaciones de Vista y Proyección
+        projectionOp = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
+        viewOp = camera.GetViewMatrix();
+        staticShader.setMat4("projection", projectionOp);
+        staticShader.setMat4("view", viewOp);
+
         // ------------------------------------------------------------------
         // Dibujo del Escenario
         // ------------------------------------------------------------------
         // Piso 
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(0.4f)); 
+        modelOp = glm::scale(modelOp, glm::vec3(0.4f));
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
-        
 
-        // Distribución de las tumbas
+
+        // Distribución de las tumbas (20 posiciones divididas entre los 3 modelos)
         glm::vec3 posicionesTumba1[] = {
-            glm::vec3(-250.0f, 0.0f, -250.0f), glm::vec3(0.0f, 0.0f, -250.0f), glm::vec3(250.0f, 0.0f, -250.0f),
-            glm::vec3(-125.0f, 0.0f, -100.0f), glm::vec3(125.0f, 0.0f, -100.0f),
-            glm::vec3(-250.0f, 0.0f,   50.0f), glm::vec3(0.0f, 0.0f,   50.0f), glm::vec3(250.0f, 0.0f,   50.0f),
-            glm::vec3(-125.0f, 0.0f,  200.0f), glm::vec3(125.0f, 0.0f,  200.0f)
+            glm::vec3(-250.0f, 0.0f, -250.0f), glm::vec3(125.0f, 0.0f, -250.0f),
+            glm::vec3(-125.0f, 0.0f, -100.0f), glm::vec3(250.0f, 0.0f, -100.0f),
+            glm::vec3(0.0f, 0.0f,   50.0f),
+            glm::vec3(-250.0f, 0.0f,  200.0f), glm::vec3(125.0f, 0.0f,  200.0f)
         };
 
         glm::vec3 posicionesTumba2[] = {
-            glm::vec3(-125.0f, 0.0f, -250.0f), glm::vec3(125.0f, 0.0f, -250.0f),
-            glm::vec3(-250.0f, 0.0f, -100.0f), glm::vec3(0.0f, 0.0f, -100.0f), glm::vec3(250.0f, 0.0f, -100.0f),
-            glm::vec3(-125.0f, 0.0f,   50.0f), glm::vec3(125.0f, 0.0f,   50.0f),
-            glm::vec3(-250.0f, 0.0f,  200.0f), glm::vec3(0.0f, 0.0f,  200.0f), glm::vec3(250.0f, 0.0f,  200.0f)
+            glm::vec3(-125.0f, 0.0f, -250.0f), glm::vec3(250.0f, 0.0f, -250.0f),
+            glm::vec3(0.0f, 0.0f, -100.0f),
+            glm::vec3(-250.0f, 0.0f,   50.0f), glm::vec3(125.0f, 0.0f,   50.0f),
+            glm::vec3(-125.0f, 0.0f,  200.0f), glm::vec3(250.0f, 0.0f,  200.0f)
+        };
+
+        glm::vec3 posicionesTumba3[] = {
+            glm::vec3(0.0f, 0.0f, -250.0f),
+            glm::vec3(-250.0f, 0.0f, -100.0f), glm::vec3(125.0f, 0.0f, -100.0f),
+            glm::vec3(-125.0f, 0.0f,   50.0f), glm::vec3(250.0f, 0.0f,   50.0f),
+            glm::vec3(0.0f, 0.0f,  200.0f)
         };
 
 
-        // Tumba 1 
-        for (int i = 0; i < 10; i++) {
+        // Tumba 1 (Diseño original - 7 copias)
+        for (int i = 0; i < 7; i++) {
             modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba1[i]);
             modelOp = glm::scale(modelOp, glm::vec3(1.0f));
             staticShader.setMat4("model", modelOp);
@@ -299,8 +323,8 @@ int main() {
         }
 
 
-        // Tumba 2 
-        for (int i = 0; i < 10; i++) {
+        // Tumba 2 (Papel picado - 7 copias)
+        for (int i = 0; i < 7; i++) {
             modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba2[i]);
 
             if (i % 2 == 0) {
@@ -313,6 +337,22 @@ int main() {
             modelOp = glm::scale(modelOp, glm::vec3(2.5f));
             staticShader.setMat4("model", modelOp);
             Tumba2.Draw(staticShader);
+        }
+
+
+        // Tumba 3 (Cempasúchil y copalero - 6 copias)
+        for (int i = 0; i < 6; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba3[i]);
+
+            // Variación para que la cabecera apunte a distintos lados del pasillo
+            if (i % 2 == 0) {
+                modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            }
+
+            // Escala aumentada de 1.0f a 1.5f
+            modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+            staticShader.setMat4("model", modelOp);
+            Tumba3.Draw(staticShader);
         }
 
 
