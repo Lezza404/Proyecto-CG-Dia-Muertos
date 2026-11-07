@@ -183,6 +183,7 @@ int main() {
     Model Tumba("resources/objects/Tumba/Tumba.obj");
     Model Tumba2("resources/objects/Tumba2/Tumba2.obj");
     Model Tumba3("resources/objects/Tumba3/Tumba3.obj");
+    Model Entrada("resources/objects/Entrada_arco/Entrada_arco.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -281,79 +282,172 @@ int main() {
         staticShader.setMat4("projection", projectionOp);
         staticShader.setMat4("view", viewOp);
 
+
         // ------------------------------------------------------------------
         // Dibujo del Escenario
         // ------------------------------------------------------------------
         // Piso 
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(0.4f));
+        modelOp = glm::scale(modelOp, glm::vec3(0.6f));
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
 
-
-        // Distribución de las tumbas (20 posiciones divididas entre los 3 modelos)
-        glm::vec3 posicionesTumba1[] = {
-            glm::vec3(-250.0f, 0.0f, -250.0f), glm::vec3(125.0f, 0.0f, -250.0f),
-            glm::vec3(-125.0f, 0.0f, -100.0f), glm::vec3(250.0f, 0.0f, -100.0f),
-            glm::vec3(0.0f, 0.0f,   50.0f),
-            glm::vec3(-250.0f, 0.0f,  200.0f), glm::vec3(125.0f, 0.0f,  200.0f)
-        };
-
-        glm::vec3 posicionesTumba2[] = {
-            glm::vec3(-125.0f, 0.0f, -250.0f), glm::vec3(250.0f, 0.0f, -250.0f),
-            glm::vec3(0.0f, 0.0f, -100.0f),
-            glm::vec3(-250.0f, 0.0f,   50.0f), glm::vec3(125.0f, 0.0f,   50.0f),
-            glm::vec3(-125.0f, 0.0f,  200.0f), glm::vec3(250.0f, 0.0f,  200.0f)
-        };
-
-        glm::vec3 posicionesTumba3[] = {
-            glm::vec3(0.0f, 0.0f, -250.0f),
-            glm::vec3(-250.0f, 0.0f, -100.0f), glm::vec3(125.0f, 0.0f, -100.0f),
-            glm::vec3(-125.0f, 0.0f,   50.0f), glm::vec3(250.0f, 0.0f,   50.0f),
-            glm::vec3(0.0f, 0.0f,  200.0f)
-        };
+        // Entrada Monumental
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 420.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(6.0f));
+        staticShader.setMat4("model", modelOp);
+        Entrada.Draw(staticShader);
 
 
-        // Tumba 1 (Diseño original - 7 copias)
-        for (int i = 0; i < 7; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba1[i]);
-            modelOp = glm::scale(modelOp, glm::vec3(1.0f));
-            staticShader.setMat4("model", modelOp);
-            Tumba.Draw(staticShader);
-        }
+        // Tumba 1 - Posición 1
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, -250.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
 
 
-        // Tumba 2 (Papel picado - 7 copias)
-        for (int i = 0; i < 7; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba2[i]);
-
-            if (i % 2 == 0) {
-                modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            }
-            else {
-                modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            }
-
-            modelOp = glm::scale(modelOp, glm::vec3(2.5f));
-            staticShader.setMat4("model", modelOp);
-            Tumba2.Draw(staticShader);
-        }
+        // Tumba 1 - Posición 2
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(125.0f, 0.0f, -250.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
 
 
-        // Tumba 3 (Cempasúchil y copalero - 6 copias)
-        for (int i = 0; i < 6; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), posicionesTumba3[i]);
+        // Tumba 1 - Posición 3 
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-125.0f, 0.0f, -100.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(10.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
 
-            // Variación para que la cabecera apunte a distintos lados del pasillo
-            if (i % 2 == 0) {
-                modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            }
 
-            // Escala aumentada de 1.0f a 1.5f
-            modelOp = glm::scale(modelOp, glm::vec3(1.5f));
-            staticShader.setMat4("model", modelOp);
-            Tumba3.Draw(staticShader);
-        }
+        // Tumba 1 - Posición 4
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(250.0f, 0.0f, -100.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
+
+
+        // Tumba 1 - Posición 5
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 50.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
+
+
+        // Tumba 1 - Posición 6
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, 200.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
+
+
+        // Tumba 1 - Posición 7
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(125.0f, 0.0f, 200.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        staticShader.setMat4("model", modelOp);
+        Tumba.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 1
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-125.0f, 0.0f, -250.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 2
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(250.0f, 0.0f, -250.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 3
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -100.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 4
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, 50.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 5
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(125.0f, 0.0f, 50.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 6
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-125.0f, 0.0f, 200.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 2 - Posición 7
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(250.0f, 0.0f, 200.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba2.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 1
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -250.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 2
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, -100.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 3
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(125.0f, 0.0f, -100.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 4
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-125.0f, 0.0f, 50.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 5
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(250.0f, 0.0f, 50.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
+
+
+        // Tumba 3 - Posición 6
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 200.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.5f));
+        staticShader.setMat4("model", modelOp);
+        Tumba3.Draw(staticShader);
 
 
         // Skybox
