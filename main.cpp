@@ -181,6 +181,7 @@ int main() {
     Model Tumba3("resources/objects/Tumba3/Tumba3.obj");
     Model Entrada("resources/objects/Entrada_arco/Entrada_arco.obj");
     Model Muro("resources/objects/Muro/Muro.obj");
+    Model arbol("resources/objects/tree/autumn tree001-obj.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -289,443 +290,195 @@ int main() {
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
 
-        // Muro trasero (20 muros)(24 modulos, Z = -880)
-        for (int i = 0; i < 24; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-920.0f + (i * 80.0f), 0.0f, -880.0f));
+
+        // Muro trasero 
+        for (int i = 0; i < 33; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 100.0f), 0.0f, -1600.0f));
             modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.0f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro izquierdo (18 muros)(22 modulos, X = -960)
-        for (int i = 0; i < 22; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-960.0f, 0.0f, -840.0f + (i * 80.0f)));
+        // Muro lateral izquierdo 
+        for (int i = 0; i < 31; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f, 0.0f, -1500.0f + (i * 100.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.0f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro derecho (18 muros)(22 modulos, X = 960)
-        for (int i = 0; i < 22; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(960.0f, 0.0f, -840.0f + (i * 80.0f)));
+
+        // Muro lateral derecho 
+        for (int i = 0; i < 31; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1600.0f, 0.0f, -1500.0f + (i * 100.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.0f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro frontal izquierdo (9 muros)(11 modulos)
-        for (int i = 0; i < 11; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-920.0f + (i * 80.0f), 0.0f, 880.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+
+        // Lado izquierdo 
+        for (int i = 0; i < 15; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 100.0f), 0.0f, 1600.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.0f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Lado derecho (9 módulos, centros de 120 a 760)(11 modulos)
-        for (int i = 0; i < 11; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f + (i * 80.0f), 0.0f, 880.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+
+        // Lado derecho 
+        for (int i = 0; i < 15; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f + (i * 100.0f), 0.0f, 1600.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.0f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Entrada en forma de arco(Alineada al nuevo frente Z = 880)
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 880.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(6.0f));
+        // Entrada en forma de arco
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 1600.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(12.0f));
         staticShader.setMat4("model", modelOp);
         Entrada.Draw(staticShader);
 
-        // Tumba 1 (21 tumbas)
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-520.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-300.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Árboles Traseros
+        for (int i = 0; i < 5; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 800.0f), 0.0f, -1900.0f));
+            modelOp = glm::rotate(modelOp, glm::radians(i * 37.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            staticShader.setMat4("model", modelOp);
+            arbol.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-120.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Árboles Frontales
+        for (int i = 0; i < 5; i++) {
+            if (i == 2) continue;
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 800.0f), 0.0f, 1900.0f));
+            modelOp = glm::rotate(modelOp, glm::radians(i * 61.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            staticShader.setMat4("model", modelOp);
+            arbol.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Árboles Izquierdos
+        for (int i = 0; i < 5; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1900.0f, 0.0f, -1600.0f + (i * 800.0f)));
+            modelOp = glm::rotate(modelOp, glm::radians(i * 43.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            staticShader.setMat4("model", modelOp);
+            arbol.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(300.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Árboles Derechos
+        for (int i = 0; i < 5; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1900.0f, 0.0f, -1600.0f + (i * 800.0f)));
+            modelOp = glm::rotate(modelOp, glm::radians(i * 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            staticShader.setMat4("model", modelOp);
+            arbol.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, -480.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 0.0f, -350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Tumba 1
+        glm::vec3 posT1[25] = {
+            glm::vec3(-1200.0f, 0.0f, -1350.0f), glm::vec3(-700.0f, 0.0f, -1300.0f), glm::vec3(-200.0f, 0.0f, -1400.0f), glm::vec3(400.0f, 0.0f, -1300.0f), glm::vec3(900.0f, 0.0f, -1350.0f),
+            glm::vec3(-1400.0f, 0.0f, -850.0f), glm::vec3(-850.0f, 0.0f, -850.0f), glm::vec3(600.0f, 0.0f, -850.0f), glm::vec3(1150.0f, 0.0f, -900.0f),
+            glm::vec3(-1100.0f, 0.0f, -400.0f), glm::vec3(-550.0f, 0.0f, -450.0f), glm::vec3(250.0f, 0.0f, -500.0f), glm::vec3(800.0f, 0.0f, -400.0f),
+            glm::vec3(-1350.0f, 0.0f, 100.0f), glm::vec3(-750.0f, 0.0f, 50.0f), glm::vec3(450.0f, 0.0f, 100.0f), glm::vec3(1300.0f, 0.0f, 50.0f),
+            glm::vec3(-1000.0f, 0.0f, 600.0f), glm::vec3(-450.0f, 0.0f, 550.0f), glm::vec3(550.0f, 0.0f, 600.0f), glm::vec3(1050.0f, 0.0f, 550.0f),
+            glm::vec3(-1300.0f, 0.0f, 1100.0f), glm::vec3(-700.0f, 0.0f, 1050.0f), glm::vec3(750.0f, 0.0f, 1100.0f), glm::vec3(1250.0f, 0.0f, 1050.0f)
+        };
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-280.0f, 0.0f, -350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(280.0f, 0.0f, -350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        float rotT1[25] = {
+            0.0f, 90.0f, 0.0f, 90.0f, 0.0f,
+            90.0f, 0.0f, 90.0f, 0.0f,
+            0.0f, 90.0f, 0.0f, 90.0f,
+            90.0f, 0.0f, 90.0f, 0.0f,
+            0.0f, 90.0f, 0.0f, 90.0f,
+            90.0f, 0.0f, 90.0f, 0.0f
+        };
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(420.0f, 0.0f, -350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, -350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        for (int i = 0; i < 25; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posT1[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(rotT1[i]), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(3.5f));
+            staticShader.setMat4("model", modelOp);
+            Tumba.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-520.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-300.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Tumba 2
+        glm::vec3 posT2[25] = {
+            glm::vec3(-950.0f, 0.0f, -1300.0f), glm::vec3(-450.0f, 0.0f, -1250.0f), glm::vec3(150.0f, 0.0f, -1300.0f), glm::vec3(650.0f, 0.0f, -1250.0f), glm::vec3(1250.0f, 0.0f, -1350.0f),
+            glm::vec3(-1150.0f, 0.0f, -800.0f), glm::vec3(-550.0f, 0.0f, -850.0f), glm::vec3(350.0f, 0.0f, -800.0f), glm::vec3(900.0f, 0.0f, -850.0f), glm::vec3(1450.0f, 0.0f, -800.0f),
+            glm::vec3(-1350.0f, 0.0f, -350.0f), glm::vec3(-850.0f, 0.0f, -400.0f), glm::vec3(550.0f, 0.0f, -350.0f), glm::vec3(1100.0f, 0.0f, -400.0f),
+            glm::vec3(-1050.0f, 0.0f, 150.0f), glm::vec3(-450.0f, 0.0f, 100.0f), glm::vec3(750.0f, 0.0f, 150.0f), glm::vec3(1050.0f, 0.0f, 100.0f),
+            glm::vec3(-1350.0f, 0.0f, 650.0f), glm::vec3(-750.0f, 0.0f, 600.0f), glm::vec3(850.0f, 0.0f, 650.0f), glm::vec3(1350.0f, 0.0f, 600.0f),
+            glm::vec3(-1050.0f, 0.0f, 1150.0f), glm::vec3(-450.0f, 0.0f, 1100.0f), glm::vec3(1000.0f, 0.0f, 1150.0f)
+        };
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-700.0f, 0.0f, -600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(700.0f, 0.0f, -600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        float rotT2[25] = {
+            90.0f, 0.0f, 90.0f, 0.0f, 90.0f,
+            0.0f, 90.0f, 0.0f, 90.0f, 0.0f,
+            90.0f, 0.0f, 90.0f, 0.0f,
+            0.0f, 90.0f, 0.0f, 90.0f,
+            90.0f, 0.0f, 90.0f, 0.0f,
+            0.0f, 90.0f, 0.0f
+        };
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-700.0f, 0.0f, -100.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(700.0f, 0.0f, -100.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        for (int i = 0; i < 25; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posT2[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(rotT2[i]), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(6.0f));
+            staticShader.setMat4("model", modelOp);
+            Tumba2.Draw(staticShader);
+        }
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-350.0f, 0.0f, 600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(350.0f, 0.0f, 600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        // Tumba 3
+        glm::vec3 posT3[25] = {
+            glm::vec3(-1450.0f, 0.0f, -1250.0f), glm::vec3(-1100.0f, 0.0f, -1050.0f), glm::vec3(-300.0f, 0.0f, -1000.0f), glm::vec3(300.0f, 0.0f, -1050.0f), glm::vec3(1050.0f, 0.0f, -1100.0f),
+            glm::vec3(-1350.0f, 0.0f, -600.0f), glm::vec3(-750.0f, 0.0f, -650.0f), glm::vec3(150.0f, 0.0f, -600.0f), glm::vec3(750.0f, 0.0f, -650.0f), glm::vec3(1300.0f, 0.0f, -600.0f),
+            glm::vec3(-1150.0f, 0.0f, -150.0f), glm::vec3(-650.0f, 0.0f, -200.0f), glm::vec3(450.0f, 0.0f, -150.0f), glm::vec3(1250.0f, 0.0f, -200.0f),
+            glm::vec3(-1250.0f, 0.0f, 350.0f), glm::vec3(-850.0f, 0.0f, 300.0f), glm::vec3(-250.0f, 0.0f, 350.0f), glm::vec3(950.0f, 0.0f, 300.0f), glm::vec3(1450.0f, 0.0f, 350.0f),
+            glm::vec3(-1150.0f, 0.0f, 850.0f), glm::vec3(-600.0f, 0.0f, 800.0f), glm::vec3(600.0f, 0.0f, 850.0f), glm::vec3(1150.0f, 0.0f, 800.0f),
+            glm::vec3(-800.0f, 0.0f, 1300.0f), glm::vec3(850.0f, 0.0f, 1300.0f)
+        };
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-650.0f, 0.0f, 400.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(650.0f, 0.0f, 400.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.2f));
-        staticShader.setMat4("model", modelOp);
-        Tumba.Draw(staticShader);
+        float rotT3[25] = {
+            0.0f, 90.0f, 0.0f, 90.0f, 0.0f,
+            90.0f, 0.0f, 90.0f, 0.0f, 90.0f,
+            0.0f, 90.0f, 0.0f, 90.0f,
+            90.0f, 0.0f, 90.0f, 0.0f, 90.0f,
+            0.0f, 90.0f, 0.0f, 90.0f,
+            90.0f, 0.0f
+        };
 
-        // Tumba 2 (21 tumbas)
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-120.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
 
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(350.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, -200.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-400.0f, 0.0f, -30.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-200.0f, 0.0f, -30.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 0.0f, -30.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(450.0f, 0.0f, -30.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-520.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-300.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-120.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(300.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(500.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-700.0f, 0.0f, 150.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(700.0f, 0.0f, 150.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 0.0f, 580.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(500.0f, 0.0f, 580.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-150.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(150.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(4.0f));
-        staticShader.setMat4("model", modelOp);
-        Tumba2.Draw(staticShader);
-
-        // TUMBA 3 (21 Tumbas)
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, 120.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-500.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-280.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-120.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(350.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, 280.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-520.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-300.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-120.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(350.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(520.0f, 0.0f, 440.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(250.0f, 0.0f, -620.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-700.0f, 0.0f, 300.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(700.0f, 0.0f, 300.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-200.0f, 0.0f, 600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(200.0f, 0.0f, 600.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-650.0f, 0.0f, -300.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
-
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(650.0f, 0.0f, -300.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.8f));
-        staticShader.setMat4("model", modelOp);
-        Tumba3.Draw(staticShader);
+        for (int i = 0; i < 25; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posT3[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(rotT3[i]), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(4.5f));
+            staticShader.setMat4("model", modelOp);
+            Tumba3.Draw(staticShader);
+        }
         
+
         // Skybox
         skyboxShader.use();
         glm::mat4 skyboxView = glm::rotate(viewOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         skybox.Draw(skyboxShader, skyboxView, projectionOp, camera);
 
         
-        // Limitador de Framerate a 60 FPS
+        // Limitador de framerate a 60 FPS
         deltaTime = SDL_GetTicks() - lastFrame;
         if (deltaTime < LOOP_TIME) {
             SDL_Delay((int)(LOOP_TIME - deltaTime));
