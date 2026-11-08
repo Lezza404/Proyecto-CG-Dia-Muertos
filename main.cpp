@@ -36,7 +36,7 @@ unsigned int SCR_HEIGHT = 600;
 GLFWmonitor* monitors;
 
 // Cámara sintética (Posición inicial sobre el piso)
-Camera camera(glm::vec3(0.0f, 10.0f, 50.0f));
+Camera camera(glm::vec3(0.0f, 40.0f, 50.0f));
 float MovementSpeed = 2.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
         lastY = SCR_HEIGHT / 2.0f;
@@ -285,55 +285,55 @@ int main() {
         // ------------------------------------------------------------------
         // Piso 
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(1.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
 
-        // Muro trasero (20 muros)
-        for (int i = 0; i < 20; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-760.0f + (i * 80.0f), 0.0f, -720.0f));
+        // Muro trasero (20 muros)(24 modulos, Z = -880)
+        for (int i = 0; i < 24; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-920.0f + (i * 80.0f), 0.0f, -880.0f));
             modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(2.4f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro izquierdo (18 muros)
-        for (int i = 0; i < 18; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-800.0f, 0.0f, -680.0f + (i * 80.0f)));
+        // Muro izquierdo (18 muros)(22 modulos, X = -960)
+        for (int i = 0; i < 22; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-960.0f, 0.0f, -840.0f + (i * 80.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(2.4f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro derecho (18 muros)
-        for (int i = 0; i < 18; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(800.0f, 0.0f, -680.0f + (i * 80.0f)));
+        // Muro derecho (18 muros)(22 modulos, X = 960)
+        for (int i = 0; i < 22; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(960.0f, 0.0f, -840.0f + (i * 80.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(2.4f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Muro frontal (9 muros)
-        for (int i = 0; i < 9; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-760.0f + (i * 80.0f), 0.0f, 720.0f));
+        // Muro frontal izquierdo (9 muros)(11 modulos)
+        for (int i = 0; i < 11; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-920.0f + (i * 80.0f), 0.0f, 880.0f));
             modelOp = glm::scale(modelOp, glm::vec3(2.4f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Lado derecho (9 módulos, centros de 120 a 760)
-        for (int i = 0; i < 9; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f + (i * 80.0f), 0.0f, 720.0f));
+        // Lado derecho (9 módulos, centros de 120 a 760)(11 modulos)
+        for (int i = 0; i < 11; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(120.0f + (i * 80.0f), 0.0f, 880.0f));
             modelOp = glm::scale(modelOp, glm::vec3(2.4f));
             staticShader.setMat4("model", modelOp);
             Muro.Draw(staticShader);
         }
 
-        // Entrada en forma de arco
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 720.0f));
+        // Entrada en forma de arco(Alineada al nuevo frente Z = 880)
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 880.0f));
         modelOp = glm::scale(modelOp, glm::vec3(6.0f));
         staticShader.setMat4("model", modelOp);
         Entrada.Draw(staticShader);
@@ -760,15 +760,18 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     // Posiciones rápidas de cámara requeridas por el proyecto (Teclas 1, 2 y 3)
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         // 1) Puerta principal / Fachada exterior
-        camera.Position = glm::vec3(0.0f, 10.0f, 120.0f);
+        camera.Position = glm::vec3(0.0f, 35.0f, 1020.0f);
+        camera.Yaw = -90.0f; //Orienta hacia el eje -Z (hacia el arco)
+        camera.Pitch = -2.0f; //Ligera inclinación hacia la entrada
+        camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); //Vector de vista hacia el interior
     }
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
         // 2) Cerca de un elemento con animación
-        camera.Position = glm::vec3(-30.0f, 8.0f, 20.0f);
+        camera.Position = glm::vec3(-30.0f, 25.0f, 20.0f);
     }
     if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
         // 3) Cerca del elemento de gran detalle (Ofrenda central)
-        camera.Position = glm::vec3(0.0f, 8.0f, 0.0f);
+        camera.Position = glm::vec3(0.0f, 35.0f, 60.0f);
     }
 
     // Reproducir animación por KeyFrames (Tecla P)
