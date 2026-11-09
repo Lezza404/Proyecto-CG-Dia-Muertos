@@ -2,6 +2,9 @@
 /* ----------- Proyecto Final: Panteón Oaxaca -------------*/
 /*-----------------    Semestre 2027-1   ------------------*/
 /*---------------------------------------------------------*/
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 #include <Windows.h>
 #include <glad/glad.h>
 #include <glfw3.h>                      // main
@@ -195,6 +198,33 @@ int main() {
     glm::mat4 modelOp = glm::mat4(1.0f);
     glm::mat4 viewOp = glm::mat4(1.0f);
     glm::mat4 projectionOp = glm::mat4(1.0f);
+
+
+    // ==================================================================
+    // Configuración de audio (miniaudio)
+    // ==================================================================
+    ma_engine engine;
+    ma_result result = ma_engine_init(NULL, &engine);
+    if (result != MA_SUCCESS) {
+        std::cout << "Error al iniciar el motor de audio miniaudio" << std::endl;
+        return -1;
+    }
+
+    // Se carga y configura la música de fondo (mp3 o wav)
+    ma_sound musicaFondo;
+
+    // Se añade la canción seleccionada para la ambientación del escenario
+    ma_sound_init_from_file(&engine, "resources/music/Spanish Rose.mp3", 0, NULL, NULL, &musicaFondo);
+
+    // La canción se mete dentro de un bucle para que nunca deje de sonar
+    ma_sound_set_looping(&musicaFondo, MA_TRUE);
+
+    // Volumen
+    ma_sound_set_volume(&musicaFondo, 0.1f);
+
+    // Se inicia la reproducción
+    ma_sound_start(&musicaFondo);
+
 
     // ------------------------------------------------------------------
     // Ciclo de renderizado (Render Loop)
@@ -582,6 +612,10 @@ int main() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    // Para limpiar la memoria de audio antes de cerrar la ventana
+    ma_sound_uninit(&musicaFondo);
+    ma_engine_uninit(&engine);
 
     glfwTerminate();
     return 0;
