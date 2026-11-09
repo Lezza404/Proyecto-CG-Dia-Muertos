@@ -185,7 +185,9 @@ int main() {
     Model Tumba3("resources/objects/Tumba3/Tumba3.obj");
     Model Entrada("resources/objects/Entrada_arco/Entrada_arco.obj");
     Model Muro("resources/objects/Muro/Muro.obj");
-    Model arbol("resources/objects/tree/autumn tree001-obj.obj");
+    Model Arbol("resources/objects/tree/autumn tree001-obj.obj");
+    Model Postes("resources/objects/Postes_Papel_Picado/Postes.obj");
+    Model Papel_picado("resources/objects/Postes_Papel_Picado/Papel_picado.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -471,7 +473,7 @@ int main() {
             modelOp = glm::rotate(modelOp, glm::radians(i * 37.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
-            arbol.Draw(staticShader);
+            Arbol.Draw(staticShader);
         }
 
 
@@ -482,7 +484,7 @@ int main() {
             modelOp = glm::rotate(modelOp, glm::radians(i * 61.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
-            arbol.Draw(staticShader);
+            Arbol.Draw(staticShader);
         }
 
 
@@ -492,7 +494,7 @@ int main() {
             modelOp = glm::rotate(modelOp, glm::radians(i * 43.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
-            arbol.Draw(staticShader);
+            Arbol.Draw(staticShader);
         }
 
 
@@ -502,7 +504,29 @@ int main() {
             modelOp = glm::rotate(modelOp, glm::radians(i * 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
             modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
-            arbol.Draw(staticShader);
+            Arbol.Draw(staticShader);
+        }
+
+
+        // Postes
+        for (int i = -4; i <= 4; i++) {
+            float posZ = i * 350.0f;
+
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 5.0f, posZ));
+            modelOp = glm::scale(modelOp, glm::vec3(15.0f));
+            staticShader.setMat4("model", modelOp);
+            Postes.Draw(staticShader);
+        }
+
+
+        // Papeles picados
+        for (int i = -4; i <= 4; i++) {
+            float posZ = i * 350.0f;
+
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 700.0f, posZ));
+            modelOp = glm::scale(modelOp, glm::vec3(15.0f));
+            staticShader.setMat4("model", modelOp);
+            Papel_picado.Draw(staticShader);
         }
 
 
