@@ -176,6 +176,7 @@ int main() {
     // Carga de modelos del escenario
     // ------------------------------------------------------------------
     Model Piso("resources/objects/Piso/Piso.obj");
+    Model Pasto("resources/objects/Pasto/Pasto.obj");
     Model Tumba("resources/objects/Tumba/Tumba.obj");
     Model Tumba2("resources/objects/Tumba2/Tumba2.obj");
     Model Tumba3("resources/objects/Tumba3/Tumba3.obj");
@@ -212,22 +213,23 @@ int main() {
         staticShader.use();
         staticShader.setVec3("viewPos", camera.Position);
 
-        // Luz Direccional
+        // Luz Direccional (como un efecto de anochecer azul)
         staticShader.setVec3("dirLight.direction", lightDirection);
-        staticShader.setVec3("dirLight.ambient", glm::vec3(0.18f, 0.18f, 0.25f));
-        staticShader.setVec3("dirLight.diffuse", glm::vec3(0.25f, 0.25f, 0.35f));
-        staticShader.setVec3("dirLight.specular", glm::vec3(0.1f, 0.1f, 0.1f));
+        staticShader.setVec3("dirLight.ambient", glm::vec3(0.02f, 0.05f, 0.12f));
+        staticShader.setVec3("dirLight.diffuse", glm::vec3(0.08f, 0.12f, 0.20f));
+        staticShader.setVec3("dirLight.specular", glm::vec3(0.05f, 0.05f, 0.1f));
 
-        // Vela 
+        // Parámetros de base para las veladoras
         float vela_constant = 1.0f;
-        float vela_linear = 0.009f;
-        float vela_quadratic = 0.00032f;
-        glm::vec3 vela_ambient = glm::vec3(0.05f, 0.02f, 0.0f);
-        glm::vec3 vela_diffuse = glm::vec3(0.6f, 0.3f, 0.05f); // Tono cálido
-        glm::vec3 vela_specular = glm::vec3(0.2f, 0.1f, 0.0f);
+        float vela_linear = 0.0014f;
+        float vela_quadratic = 0.000007f;
+        glm::vec3 vela_ambient = glm::vec3(0.4f, 0.15f, 0.0f);
+        glm::vec3 vela_diffuse = glm::vec3(1.0f, 0.6f, 0.1f);
+        glm::vec3 vela_specular = glm::vec3(0.8f, 0.4f, 0.1f);
 
-        // Luz Puntual 0 
-        staticShader.setVec3("pointLight[0].position", glm::vec3(0.0f, 12.0f, -250.0f));
+
+        // Veladora 0 (Centro 1)
+        staticShader.setVec3("pointLight[0].position", glm::vec3(0.0f, 25.0f, -250.0f));
         staticShader.setVec3("pointLight[0].ambient", vela_ambient);
         staticShader.setVec3("pointLight[0].diffuse", vela_diffuse);
         staticShader.setVec3("pointLight[0].specular", vela_specular);
@@ -235,8 +237,9 @@ int main() {
         staticShader.setFloat("pointLight[0].linear", vela_linear);
         staticShader.setFloat("pointLight[0].quadratic", vela_quadratic);
 
-        // Luz Puntual 1 
-        staticShader.setVec3("pointLight[1].position", glm::vec3(-250.0f, 12.0f, 200.0f));
+
+        // Veladora 1 (Centro 2)
+        staticShader.setVec3("pointLight[1].position", glm::vec3(-250.0f, 25.0f, 200.0f));
         staticShader.setVec3("pointLight[1].ambient", vela_ambient);
         staticShader.setVec3("pointLight[1].diffuse", vela_diffuse);
         staticShader.setVec3("pointLight[1].specular", vela_specular);
@@ -244,8 +247,9 @@ int main() {
         staticShader.setFloat("pointLight[1].linear", vela_linear);
         staticShader.setFloat("pointLight[1].quadratic", vela_quadratic);
 
-        // Luz Puntual 2 
-        staticShader.setVec3("pointLight[2].position", glm::vec3(250.0f, 12.0f, -250.0f));
+
+        // Veladora 2 (Centro 3)
+        staticShader.setVec3("pointLight[2].position", glm::vec3(250.0f, 25.0f, -250.0f));
         staticShader.setVec3("pointLight[2].ambient", vela_ambient);
         staticShader.setVec3("pointLight[2].diffuse", vela_diffuse);
         staticShader.setVec3("pointLight[2].specular", vela_specular);
@@ -253,17 +257,98 @@ int main() {
         staticShader.setFloat("pointLight[2].linear", vela_linear);
         staticShader.setFloat("pointLight[2].quadratic", vela_quadratic);
 
+
+        // Veladora 3 (Arriba Izquierda)
+        staticShader.setVec3("pointLight[3].position", glm::vec3(-1000.0f, 25.0f, -1000.0f));
+        staticShader.setVec3("pointLight[3].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[3].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[3].specular", vela_specular);
+        staticShader.setFloat("pointLight[3].constant", vela_constant);
+        staticShader.setFloat("pointLight[3].linear", vela_linear);
+        staticShader.setFloat("pointLight[3].quadratic", vela_quadratic);
+
+
+        // Veladora 4 (Arriba Centro)
+        staticShader.setVec3("pointLight[4].position", glm::vec3(0.0f, 25.0f, -1200.0f));
+        staticShader.setVec3("pointLight[4].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[4].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[4].specular", vela_specular);
+        staticShader.setFloat("pointLight[4].constant", vela_constant);
+        staticShader.setFloat("pointLight[4].linear", vela_linear);
+        staticShader.setFloat("pointLight[4].quadratic", vela_quadratic);
+
+
+        // Veladora 5 (Arriba Derecha)
+        staticShader.setVec3("pointLight[5].position", glm::vec3(1000.0f, 25.0f, -1000.0f));
+        staticShader.setVec3("pointLight[5].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[5].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[5].specular", vela_specular);
+        staticShader.setFloat("pointLight[5].constant", vela_constant);
+        staticShader.setFloat("pointLight[5].linear", vela_linear);
+        staticShader.setFloat("pointLight[5].quadratic", vela_quadratic);
+
+
+        // Veladora 6 (Medio Izquierda)
+        staticShader.setVec3("pointLight[6].position", glm::vec3(-1100.0f, 25.0f, 0.0f));
+        staticShader.setVec3("pointLight[6].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[6].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[6].specular", vela_specular);
+        staticShader.setFloat("pointLight[6].constant", vela_constant);
+        staticShader.setFloat("pointLight[6].linear", vela_linear);
+        staticShader.setFloat("pointLight[6].quadratic", vela_quadratic);
+
+
+        // Veladora 7 (Medio Derecha)
+        staticShader.setVec3("pointLight[7].position", glm::vec3(1100.0f, 25.0f, 0.0f));
+        staticShader.setVec3("pointLight[7].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[7].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[7].specular", vela_specular);
+        staticShader.setFloat("pointLight[7].constant", vela_constant);
+        staticShader.setFloat("pointLight[7].linear", vela_linear);
+        staticShader.setFloat("pointLight[7].quadratic", vela_quadratic);
+
+
+        // Veladora 8 (Abajo Izquierda)
+        staticShader.setVec3("pointLight[8].position", glm::vec3(-1000.0f, 25.0f, 1000.0f));
+        staticShader.setVec3("pointLight[8].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[8].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[8].specular", vela_specular);
+        staticShader.setFloat("pointLight[8].constant", vela_constant);
+        staticShader.setFloat("pointLight[8].linear", vela_linear);
+        staticShader.setFloat("pointLight[8].quadratic", vela_quadratic);
+
+
+        // Veladora 9 (Abajo Centro)
+        staticShader.setVec3("pointLight[9].position", glm::vec3(0.0f, 25.0f, 1200.0f));
+        staticShader.setVec3("pointLight[9].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[9].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[9].specular", vela_specular);
+        staticShader.setFloat("pointLight[9].constant", vela_constant);
+        staticShader.setFloat("pointLight[9].linear", vela_linear);
+        staticShader.setFloat("pointLight[9].quadratic", vela_quadratic);
+
+
+        // Veladora 10 (Abajo Derecha)
+        staticShader.setVec3("pointLight[10].position", glm::vec3(1000.0f, 25.0f, 1000.0f));
+        staticShader.setVec3("pointLight[10].ambient", vela_ambient);
+        staticShader.setVec3("pointLight[10].diffuse", vela_diffuse);
+        staticShader.setVec3("pointLight[10].specular", vela_specular);
+        staticShader.setFloat("pointLight[10].constant", vela_constant);
+        staticShader.setFloat("pointLight[10].linear", vela_linear);
+        staticShader.setFloat("pointLight[10].quadratic", vela_quadratic);
+
+
         // SpotLight 
         staticShader.setVec3("spotLight[0].position", glm::vec3(camera.Position));
         staticShader.setVec3("spotLight[0].direction", glm::vec3(camera.Front));
         staticShader.setVec3("spotLight[0].ambient", glm::vec3(0.0f));
-        staticShader.setVec3("spotLight[0].diffuse", glm::vec3(0.0f));
-        staticShader.setVec3("spotLight[0].specular", glm::vec3(0.0f));
-        staticShader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(10.0f)));
-        staticShader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(25.0f)));
+        staticShader.setVec3("spotLight[0].diffuse", glm::vec3(0.2f, 0.2f, 0.2f));
+        staticShader.setVec3("spotLight[0].specular", glm::vec3(0.2f, 0.2f, 0.2f));
+        staticShader.setFloat("spotLight[0].cutOff", glm::cos(glm::radians(12.0f)));
+        staticShader.setFloat("spotLight[0].outerCutOff", glm::cos(glm::radians(20.0f)));
         staticShader.setFloat("spotLight[0].constant", 1.0f);
-        staticShader.setFloat("spotLight[0].linear", 0.0009f);
-        staticShader.setFloat("spotLight[0].quadratic", 0.0005f);
+        staticShader.setFloat("spotLight[0].linear", 0.009f);
+        staticShader.setFloat("spotLight[0].quadratic", 0.003f);
 
         staticShader.setFloat("material_shininess", 32.0f);
 
@@ -284,11 +369,17 @@ int main() {
         // ------------------------------------------------------------------
         // Dibujo del Escenario
         // ------------------------------------------------------------------
-        // Piso 
+        // Piso de tierra 
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(2.5f));
+        modelOp = glm::scale(modelOp, glm::vec3(1.6f));
         staticShader.setMat4("model", modelOp);
         Piso.Draw(staticShader);
+
+        // Piso de pasto 
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -5.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.1f));
+        staticShader.setMat4("model", modelOp);
+        Pasto.Draw(staticShader);
 
 
         // Muro trasero 
@@ -344,39 +435,42 @@ int main() {
         Entrada.Draw(staticShader);
 
 
-        // Árboles Traseros
-        for (int i = 0; i < 5; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 800.0f), 0.0f, -1900.0f));
+        // Árboles traseros
+        for (int i = 0; i < 9; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 400.0f), 0.0f, -1900.0f));
             modelOp = glm::rotate(modelOp, glm::radians(i * 37.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
             arbol.Draw(staticShader);
         }
 
-        // Árboles Frontales
-        for (int i = 0; i < 5; i++) {
-            if (i == 2) continue;
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 800.0f), 0.0f, 1900.0f));
+
+        // Árboles frontales
+        for (int i = 0; i < 9; i++) {
+            if (i == 4) continue; // Mantiene el hueco central de 800 unidades para el arco
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 400.0f), 0.0f, 1900.0f));
             modelOp = glm::rotate(modelOp, glm::radians(i * 61.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
             arbol.Draw(staticShader);
         }
 
-        // Árboles Izquierdos
-        for (int i = 0; i < 5; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1900.0f, 0.0f, -1600.0f + (i * 800.0f)));
+
+        // Árboles izquierdos
+        for (int i = 0; i < 9; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1900.0f, 0.0f, -1600.0f + (i * 400.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(i * 43.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
             arbol.Draw(staticShader);
         }
 
-        // Árboles Derechos
-        for (int i = 0; i < 5; i++) {
-            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1900.0f, 0.0f, -1600.0f + (i * 800.0f)));
+
+        // Árboles derechos
+        for (int i = 0; i < 9; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(1900.0f, 0.0f, -1600.0f + (i * 400.0f)));
             modelOp = glm::rotate(modelOp, glm::radians(i * 19.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            modelOp = glm::scale(modelOp, glm::vec3(0.6f)); 
+            modelOp = glm::scale(modelOp, glm::vec3(0.6f));
             staticShader.setMat4("model", modelOp);
             arbol.Draw(staticShader);
         }
