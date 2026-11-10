@@ -190,6 +190,13 @@ int main() {
     Model Papel_picado("resources/objects/Postes_Papel_Picado/Papel_picado.obj");
     Model ArbolCentral("resources/objects/tree_center/maple-tree.obj");
     Model Banco("resources/objects/Banco/park-bench.obj");
+    Model Lampara("resources/objects/Lampara/spooky-lamp-post.obj");
+    Model Calavera_azucar("resources/objects/Calavera_dulce/pastel-sugar-skull.obj");
+    Model Pila_Huesos("resources/objects/Pila_Huesos/bone-pile.obj");
+    
+
+
+
     // Inicialización de KeyFrames en cero
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
@@ -495,6 +502,40 @@ int main() {
         Entrada.Draw(staticShader);
 
 
+
+        //Lamparas
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-150.0f, 0.0f, 1500.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        staticShader.setMat4("model", modelOp);
+        Lampara.Draw(staticShader);
+
+
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(150.0f, 0.0f, 1500.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        staticShader.setMat4("model", modelOp);
+        Lampara.Draw(staticShader);
+
+
+        //Calavera de azucar
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-25.0f, 0.0f, 300.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        staticShader.setMat4("model", modelOp);
+        Calavera_azucar.Draw(staticShader);
+
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f, 0.0f, 300.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(50.0f));
+        staticShader.setMat4("model", modelOp);
+        Calavera_azucar.Draw(staticShader);
+
+
+        //Pila de Huesos
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, 200.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(50.0f));
+        staticShader.setMat4("model", modelOp);
+        Pila_Huesos.Draw(staticShader);
+
+        
         // Árboles traseros
         for (int i = 0; i < 9; i++) {
             modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1600.0f + (i * 400.0f), 0.0f, -1900.0f));
@@ -559,6 +600,8 @@ int main() {
             Papel_picado.Draw(staticShader);
         }
 
+    
+        
 
         // Tumba 1
         glm::vec3 posT1[25] = {
