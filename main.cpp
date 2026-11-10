@@ -188,6 +188,8 @@ int main() {
     Model Arbol("resources/objects/tree/autumn tree001-obj.obj");
     Model Postes("resources/objects/Postes_Papel_Picado/Postes.obj");
     Model Papel_picado("resources/objects/Postes_Papel_Picado/Papel_picado.obj");
+    Model ArbolCentral("resources/objects/tree_center/maple-tree.obj");
+    Model Banco("resources/objects/Banco/park-bench.obj");
     Model Lampara("resources/objects/Lampara/spooky-lamp-post.obj");
     Model Calavera_azucar("resources/objects/Calavera_dulce/pastel-sugar-skull.obj");
     Model Pila_Huesos("resources/objects/Pila_Huesos/bone-pile.obj");
@@ -418,6 +420,34 @@ int main() {
         staticShader.setMat4("model", modelOp);
         Pasto.Draw(staticShader);
 
+        // Árbol Central
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); 
+        // modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Si necesitamos girarlo
+        modelOp = glm::scale(modelOp, glm::vec3(150.0f));
+        staticShader.setMat4("model", modelOp);
+        ArbolCentral.Draw(staticShader);
+
+        // Bancas interiores (Pared frontal / Entrada)
+        // 3 bancas del lado izquierdo y 3 del lado derecho
+        glm::vec3 posBancas[6] = {
+            // Lado izquierdo (de adentro viendo hacia afuera, X negativo)
+            glm::vec3(-400.0f, 0.0f, 1500.0f),
+            glm::vec3(-700.0f, 0.0f, 1500.0f),
+            glm::vec3(-1000.0f, 0.0f, 1500.0f),
+
+            // Lado derecho (X positivo)
+            glm::vec3(400.0f, 0.0f, 1500.0f),
+            glm::vec3(700.0f, 0.0f, 1500.0f),
+            glm::vec3(1000.0f, 0.0f, 1500.0f)
+        };
+
+        for (int i = 0; i < 6; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posBancas[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(85.0f));
+            staticShader.setMat4("model", modelOp);
+            Banco.Draw(staticShader);
+        }
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
@@ -549,6 +579,7 @@ int main() {
 
         // Postes
         for (int i = -4; i <= 4; i++) {
+            if (i == 0) continue; //Hueco central para el arbol
             float posZ = i * 350.0f;
 
             modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 5.0f, posZ));
@@ -560,6 +591,7 @@ int main() {
 
         // Papeles picados
         for (int i = -4; i <= 4; i++) {
+            if (i == 0) continue; // Hueco central
             float posZ = i * 350.0f;
 
             modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 700.0f, posZ));
@@ -706,7 +738,7 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     // Posiciones rápidas de cámara requeridas por el proyecto (Teclas 1, 2 y 3)
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         // 1) Puerta principal / Fachada exterior
-        camera.Position = glm::vec3(0.0f, 35.0f, 1020.0f);
+        camera.Position = glm::vec3(0.0f, 50.0f, 1880.0f);
         camera.Yaw = -90.0f; //Orienta hacia el eje -Z (hacia el arco)
         camera.Pitch = -2.0f; //Ligera inclinación hacia la entrada
         camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); //Vector de vista hacia el interior
