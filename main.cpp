@@ -189,8 +189,7 @@ int main() {
     Model Postes("resources/objects/Postes_Papel_Picado/Postes.obj");
     Model Papel_picado("resources/objects/Postes_Papel_Picado/Papel_picado.obj");
     Model ArbolCentral("resources/objects/tree_center/maple-tree.obj");
-
-
+    Model Banco("resources/objects/Banco/park-bench.obj");
     // Inicialización de KeyFrames en cero
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
@@ -421,6 +420,27 @@ int main() {
         staticShader.setMat4("model", modelOp);
         ArbolCentral.Draw(staticShader);
 
+        // Bancas interiores (Pared frontal / Entrada)
+        // 3 bancas del lado izquierdo y 3 del lado derecho
+        glm::vec3 posBancas[6] = {
+            // Lado izquierdo (de adentro viendo hacia afuera, X negativo)
+            glm::vec3(-400.0f, 0.0f, 1500.0f),
+            glm::vec3(-700.0f, 0.0f, 1500.0f),
+            glm::vec3(-1000.0f, 0.0f, 1500.0f),
+
+            // Lado derecho (X positivo)
+            glm::vec3(400.0f, 0.0f, 1500.0f),
+            glm::vec3(700.0f, 0.0f, 1500.0f),
+            glm::vec3(1000.0f, 0.0f, 1500.0f)
+        };
+
+        for (int i = 0; i < 6; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posBancas[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(85.0f));
+            staticShader.setMat4("model", modelOp);
+            Banco.Draw(staticShader);
+        }
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
