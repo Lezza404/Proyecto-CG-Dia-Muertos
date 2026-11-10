@@ -188,6 +188,7 @@ int main() {
     Model Arbol("resources/objects/tree/autumn tree001-obj.obj");
     Model Postes("resources/objects/Postes_Papel_Picado/Postes.obj");
     Model Papel_picado("resources/objects/Postes_Papel_Picado/Papel_picado.obj");
+    Model ArbolCentral("resources/objects/tree_center/maple-tree.obj");
 
 
     // Inicialización de KeyFrames en cero
@@ -413,6 +414,13 @@ int main() {
         staticShader.setMat4("model", modelOp);
         Pasto.Draw(staticShader);
 
+        // Árbol Central
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); // Posición centro
+        // modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Si necesitamos girarlo
+        modelOp = glm::scale(modelOp, glm::vec3(150.0f)); // Ajusta este factor según el tamaño original de tu .obj
+        staticShader.setMat4("model", modelOp);
+        ArbolCentral.Draw(staticShader);
+
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
@@ -510,6 +518,7 @@ int main() {
 
         // Postes
         for (int i = -4; i <= 4; i++) {
+            if (i == 0) continue; //Hueco central para el arbol
             float posZ = i * 350.0f;
 
             modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 5.0f, posZ));
@@ -521,6 +530,7 @@ int main() {
 
         // Papeles picados
         for (int i = -4; i <= 4; i++) {
+            if (i == 0) continue; // Hueco central
             float posZ = i * 350.0f;
 
             modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 700.0f, posZ));
@@ -665,7 +675,7 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     // Posiciones rápidas de cámara requeridas por el proyecto (Teclas 1, 2 y 3)
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         // 1) Puerta principal / Fachada exterior
-        camera.Position = glm::vec3(0.0f, 35.0f, 1020.0f);
+        camera.Position = glm::vec3(0.0f, 50.0f, 1880.0f);
         camera.Yaw = -90.0f; //Orienta hacia el eje -Z (hacia el arco)
         camera.Pitch = -2.0f; //Ligera inclinación hacia la entrada
         camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); //Vector de vista hacia el interior
