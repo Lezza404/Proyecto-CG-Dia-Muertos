@@ -64,7 +64,18 @@ float incX = 0.0f,
       incZ = 0.0f;
 
 // Para la animación del viento
-float anguloViento = 0.0f;
+float tiempo = 0.0f, 
+      anguloViento = 0.0f;
+      
+
+// Para la animación del fantasma
+float alturaFantasma = 0.0f,
+      movFantasma_x = 0.0f,
+      movFantasma_z = 900.0f,
+      orientaFantasma = 90.0f,
+      pausa = 0.0f;
+int estadoFantasma = 1;       
+
 
 
 #define MAX_FRAMES 9
@@ -103,11 +114,104 @@ void interpolation(void) {
 }
 
 void animate(void) {
-    // Cálculo de animaciones para el viento
-    float tiempo = glfwGetTime();
+    // Incrementamos nuestro propio contador de tiempo artificial en cada cuadro
+    tiempo += 0.03f;
 
-    // Oscilación entre -10 y 10 grados con la función seno
+
+    // Movimiento del viento con una oscilación de 10 grados
     anguloViento = sin(tiempo * 2.0f) * glm::radians(10.0f);
+
+
+    // Cambio de altura del fantasma de 5 unidades
+    alturaFantasma = sin(tiempo * 1.5f) * 5.0f;
+
+
+    // Máquina de estados para el movimiento del fastama en el escenario
+    // Estado 1 - Se mueve hacia la derecha 
+    if (estadoFantasma == 1) {
+        if (movFantasma_x < 900.0f) {
+            movFantasma_x += 2.0f;
+            orientaFantasma = 90.0f;
+        }
+        else {
+            pausa += 0.01f;
+            if (pausa > 1.5f) {
+                pausa = 0.0f;
+                estadoFantasma = 2;
+            }
+        }
+    }
+
+
+    // Estado 2 - Se mueve hacia atrás
+    else if (estadoFantasma == 2) {
+        orientaFantasma = 180.0f;
+
+        if (movFantasma_z > -1000.0f) {
+            movFantasma_z -= 2.0f; 
+        }
+
+        else {
+            pausa += 0.01f;
+            
+            if (pausa > 1.5f) {
+                pausa = 0.0f;
+                estadoFantasma = 3;
+            }
+        }
+    }
+
+
+    // Estado 3 - Se mueve a la izquierda
+    else if (estadoFantasma == 3) {
+        orientaFantasma = 270.0f; 
+        
+        if (movFantasma_x > -1000.0f) {
+            movFantasma_x -= 2.0f;
+        }
+        
+        else {
+            pausa += 0.01f;
+
+            if (pausa > 1.5f) {
+                pausa = 0.0f;
+                estadoFantasma = 4;
+            }
+        }
+    }
+
+
+    // Estado 4 - Se mueve hacia enfrente 
+    else if (estadoFantasma == 4) {
+        orientaFantasma = 0.0f;
+
+        if (movFantasma_z < 900.0f) {
+            movFantasma_z += 2.0f;
+        }
+
+        else {
+            pausa += 0.01f;
+            
+            if (pausa > 1.5f) {
+                pausa = 0.0f;
+                estadoFantasma = 5;
+            }
+        }
+    }
+
+
+    // Estado 5 - Regresa al inicio
+    else if (estadoFantasma == 5) {
+        orientaFantasma = 90.0f;
+
+        if (movFantasma_x < 0.0f) {
+            movFantasma_x += 2.0f;
+        }
+
+        else {
+            estadoFantasma = 1;
+        }
+    }
 
 
     // Interpolación de KeyFrames
@@ -208,6 +312,7 @@ int main() {
     Model Lampara("resources/objects/Lampara/spooky-lamp-post.obj");
     Model Calavera_azucar("resources/objects/Calavera_dulce/pastel-sugar-skull.obj");
     Model Pila_Huesos("resources/objects/Pila_Huesos/bone-pile.obj");
+    Model Fantasma("resources/objects/Fantasma/Floating+Cape+1.obj");
     
 
     // Inicialización de KeyFrames en cero
@@ -437,9 +542,17 @@ int main() {
         // Árbol central del panteón
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)); 
         // modelOp = glm::rotate(modelOp, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
-        modelOp = glm::scale(modelOp, glm::vec3(180.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(200.0f));
         staticShader.setMat4("model", modelOp);
         ArbolCentral.Draw(staticShader);
+
+
+        // Fantasma
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(movFantasma_x, 15.0f + alturaFantasma, movFantasma_z));
+        modelOp = glm::rotate(modelOp, glm::radians(orientaFantasma), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(120.0f));
+        staticShader.setMat4("model", modelOp);
+        Fantasma.Draw(staticShader);
 
 
         // Bancas interiores (Pared frontal / Entrada)
@@ -1078,7 +1191,7 @@ int main() {
 
 
         // Tumba 8 con diseño Tumba3
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(150.0f, 0.0f, -600.0f));
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-150.0f, 0.0f, -600.0f));
         modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         modelOp = glm::scale(modelOp, glm::vec3(4.5f));
         staticShader.setMat4("model", modelOp);
