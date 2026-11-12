@@ -4,17 +4,16 @@
 /*---------------------------------------------------------*/
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
-
 #include <Windows.h>
 #include <glad/glad.h>
-#include <glfw3.h>                      // main
+#include <glfw3.h>                      
 #include <stdlib.h>     
-#include <glm/glm.hpp>                  // camera y model
-#include <glm/gtc/matrix_transform.hpp> // camera y model
+#include <glm/glm.hpp>                  
+#include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtc/type_ptr.hpp>
 #include <time.h>
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>                  // Texture
+#include <stb_image.h>                  
 #define SDL_MAIN_HANDLED
 #include <SDL3/SDL.h>
 #include <shader_m.h>
@@ -25,7 +24,7 @@
 #include <iostream>
 #include <mmsystem.h>
 
-// Prototipos de funciones
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -38,7 +37,7 @@ unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
 GLFWmonitor* monitors;
 
-// Cámara sintética (Posición inicial sobre el piso)
+// Cámara sintética (inicia sobre el piso)
 Camera camera(glm::vec3(0.0f, 40.0f, 50.0f));
 float MovementSpeed = 2.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
@@ -51,9 +50,7 @@ const int LOOP_TIME = 1000 / FPS;
 double deltaTime = 0.0f,
 lastFrame = 0.0f;
 
-// Iluminación
-glm::vec3 lightPosition(0.0f, 5.0f, 0.0f);     // Posición para luz puntual (ej. veladora)
-glm::vec3 lightDirection(0.0f, -1.0f, -0.5f);  // Dirección de la luz ambiental nocturna
+
 
 // Variables para KeyFrames
 float posX = 0.0f, 
@@ -62,6 +59,7 @@ float posX = 0.0f,
 float incX = 0.0f, 
       incY = 0.0f, 
       incZ = 0.0f;
+
 
 // Para la animación del viento
 float tiempo = 0.0f, 
@@ -75,7 +73,6 @@ float alturaFantasma = 0.0f,
       orientaFantasma = 90.0f,
       pausa = 0.0f;
 int estadoFantasma = 1;       
-
 
 
 #define MAX_FRAMES 9
@@ -114,7 +111,7 @@ void interpolation(void) {
 }
 
 void animate(void) {
-    // Incrementamos nuestro propio contador de tiempo artificial en cada cuadro
+    // Variable de tiempo para las animaciones
     tiempo += 0.03f;
 
 
@@ -237,14 +234,16 @@ void animate(void) {
     }
 }
 
+
 void getResolution() {
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
     SCR_WIDTH = mode->width;
     SCR_HEIGHT = (mode->height) - 80;
 }
 
+
 int main() {
-    // Inicializar GLFW
+    // Se inicializa GLFW
     glfwInit();
 
     monitors = glfwGetPrimaryMonitor();
@@ -263,10 +262,10 @@ int main() {
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetKeyCallback(window, my_input);
 
-    // Captura del cursor (Puedes cambiar GLFW_CURSOR_NORMAL a GLFW_CURSOR_DISABLED si quieres ocultar el puntero)
+    // Captura del cursor 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-    // Inicializar GLAD
+    // Se inicializa GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
@@ -294,6 +293,7 @@ int main() {
 
     skyboxShader.setInt("skybox", 0);
 
+
     // ------------------------------------------------------------------
     // Carga de los modelos del escenario
     // ------------------------------------------------------------------
@@ -316,7 +316,7 @@ int main() {
     Model Ofrenda("resources/objects/Ofrenda/Ofrenda.obj");
     
 
-    // Inicialización de KeyFrames en cero
+    // Inicialización de KeyFrames en 0
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
         KeyFrame[i].posY = 0;
@@ -338,16 +338,16 @@ int main() {
         return -1;
     }
 
-    // Se carga y configura la música de fondo (mp3 o wav)
+    // Se carga y configura la música de fondo (mp3)
     ma_sound musicaFondo;
 
-    // Se añade la canción seleccionada para la ambientación del escenario
+    // Se añade la canción para la ambientación del escenario
     ma_sound_init_from_file(&engine, "resources/music/Spanish Rose.mp3", 0, NULL, NULL, &musicaFondo);
 
     // La canción se mete dentro de un bucle para que nunca deje de sonar
     ma_sound_set_looping(&musicaFondo, MA_TRUE);
 
-    // Volumen
+    // Para ajustar el volumen de la canción
     ma_sound_set_volume(&musicaFondo, 0.1f);
 
     // Se inicia la reproducción
@@ -372,8 +372,8 @@ int main() {
         staticShader.setVec3("viewPos", camera.Position);
 
 
-        // Luz Direccional (como un efecto de anochecer azul)
-        staticShader.setVec3("dirLight.direction", lightDirection);
+        // Luz Direccional (efecto de anochecer azul)
+        staticShader.setVec3("dirLight.direction", glm::vec3(0.0f, -1.0f, -0.5f));
         staticShader.setVec3("dirLight.ambient", glm::vec3(0.02f, 0.05f, 0.12f));
         staticShader.setVec3("dirLight.diffuse", glm::vec3(0.08f, 0.12f, 0.20f));
         staticShader.setVec3("dirLight.specular", glm::vec3(0.05f, 0.05f, 0.1f));
@@ -501,13 +501,8 @@ int main() {
         staticShader.setFloat("spotLight[0].linear", 0.009f);
         staticShader.setFloat("spotLight[0].quadratic", 0.003f);
 
-        staticShader.setFloat("material_shininess", 32.0f);
 
-        // Transformaciones de Vista y Proyección
-        projectionOp = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
-        viewOp = camera.GetViewMatrix();
-        staticShader.setMat4("projection", projectionOp);
-        staticShader.setMat4("view", viewOp);
+        staticShader.setFloat("material_shininess", 32.0f);
 
 
         // Transformaciones de Vista y Proyección
@@ -1370,8 +1365,9 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, (float)deltaTime * MovementSpeed);
 
-    // Posiciones rápidas de cámara requeridas por el proyecto (Teclas 1, 2 y 3)
+    // Posiciones rápidas de cámara (teclas 1, 2 y 3)
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
+        
         // 1) Puerta principal / Fachada exterior
         camera.Position = glm::vec3(0.0f, 50.0f, 1880.0f);
         camera.Yaw = -90.0f; //Orienta hacia el eje -Z (hacia el arco)
@@ -1379,36 +1375,17 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
         camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); //Vector de vista hacia el interior
     }
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
+        
         // 2) Cerca de un elemento con animación
         camera.Position = glm::vec3(-30.0f, 25.0f, 20.0f);
     }
     if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
+        
         // 3) Cerca del elemento de gran detalle (Ofrenda central)
         camera.Position = glm::vec3(0.0f, 35.0f, 60.0f);
     }
 
-    // Reproducir animación por KeyFrames (Tecla P)
-    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-        if (play == false && (FrameIndex > 1)) {
-            std::cout << "Play animation" << std::endl;
-            resetElements();
-            interpolation();
-            play = true;
-            playIndex = 0;
-            i_curr_steps = 0;
-        }
-        else {
-            play = false;
-            std::cout << "Not enough Key Frames" << std::endl;
-        }
-    }
-
-    // Guardar un KeyFrame (Tecla L)
-    if (key == GLFW_KEY_L && action == GLFW_PRESS) {
-        if (FrameIndex < MAX_FRAMES) {
-            saveFrame();
-        }
-    }
+    
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
