@@ -40,7 +40,7 @@ GLFWmonitor* monitors;
 
 
 // Cámara sintética (inicia sobre el piso)
-Camera camera(glm::vec3(0.0f, 40.0f, 50.0f));
+Camera camera(glm::vec3(0.0f, 140.0f, 650.0f));
 float MovementSpeed = 2.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
         lastY = SCR_HEIGHT / 2.0f;
@@ -387,7 +387,12 @@ int main() {
     Model Esqueleto("resources/objects/Esqueleto/human-skeleton.obj");
 
 
+    ModelAnim Mujer1("resources/objects/Mujer1/Shoved.dae");
+    Mujer1.initShaders(animShader.ID);
+    
+    
     // Inicialización de KeyFrames en 0
+    
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
         KeyFrame[i].posY = 0;
@@ -419,7 +424,7 @@ int main() {
     ma_sound_set_looping(&musicaFondo, MA_TRUE);
 
     // Para ajustar el volumen de la canción
-    ma_sound_set_volume(&musicaFondo, 0.1f);
+    ma_sound_set_volume(&musicaFondo, 0.5f);
 
     // Se inicia la reproducción
     ma_sound_start(&musicaFondo);
@@ -560,6 +565,25 @@ int main() {
         staticShader.setFloat("pointLight[10].quadratic", 0.000007f);
 
 
+        // Lámpara Exterior 1 (Izquierda, entrada en Z = 1700)
+        staticShader.setVec3("pointLight[11].position", glm::vec3(-155.0f, 180.0f, 1700.0f));
+        staticShader.setVec3("pointLight[11].ambient", glm::vec3(0.35f, 0.20f, 0.05f));
+        staticShader.setVec3("pointLight[11].diffuse", glm::vec3(1.0f, 0.72f, 0.25f));
+        staticShader.setVec3("pointLight[11].specular", glm::vec3(0.9f, 0.65f, 0.25f));
+        staticShader.setFloat("pointLight[11].constant", 1.0f);
+        staticShader.setFloat("pointLight[11].linear", 0.0014f);
+        staticShader.setFloat("pointLight[11].quadratic", 0.000007f);
+
+
+        // Lámpara Exterior 2 (Derecha, entrada en Z = 1700)
+        staticShader.setVec3("pointLight[12].position", glm::vec3(155.0f, 180.0f, 1700.0f));
+        staticShader.setVec3("pointLight[12].ambient", glm::vec3(0.35f, 0.20f, 0.05f));
+        staticShader.setVec3("pointLight[12].diffuse", glm::vec3(1.0f, 0.72f, 0.25f));
+        staticShader.setVec3("pointLight[12].specular", glm::vec3(0.9f, 0.65f, 0.25f));
+        staticShader.setFloat("pointLight[12].constant", 1.0f);
+        staticShader.setFloat("pointLight[12].linear", 0.0014f);
+        staticShader.setFloat("pointLight[12].quadratic", 0.000007f);
+
         // SpotLight 
         staticShader.setVec3("spotLight[0].position", glm::vec3(camera.Position));
         staticShader.setVec3("spotLight[0].direction", glm::vec3(camera.Front));
@@ -673,6 +697,29 @@ int main() {
             Banco.Draw(staticShader);
         }
 
+        
+        // Mujer 1 animada (sentada en la primera banca izquierda)
+        animShader.use();
+        animShader.setMat4("projection", projectionOp);
+        animShader.setMat4("view", viewOp);
+        animShader.setVec3("viewPos", camera.Position);
+
+        animShader.setVec3("light.direction", glm::vec3(0.0f, -1.0f, -0.5f));
+        animShader.setVec3("light.ambient", glm::vec3(0.45f, 0.45f, 0.50f));
+        animShader.setVec3("light.diffuse", glm::vec3(0.85f, 0.85f, 0.90f));
+        animShader.setVec3("light.specular", glm::vec3(0.3f, 0.3f, 0.3f));
+
+        animShader.setVec3("material.specular", glm::vec3(0.3f, 0.3f, 0.3f));
+        animShader.setFloat("material.shininess", 16.0f);
+
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-400.0f, 0.0f, 1500.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(2.4f));
+        animShader.setMat4("model", modelOp);
+        Mujer1.Draw(animShader);
+
+        staticShader.use();
+
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
@@ -729,17 +776,18 @@ int main() {
         Entrada.Draw(staticShader);
 
 
-        // Lampara 1
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-150.0f, 0.0f, 1500.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        // Lampara 1 (Izquierda)
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-180.0f, 0.0f, 1700.0f));
+        //modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(90.0f)); 
         staticShader.setMat4("model", modelOp);
         Lampara.Draw(staticShader);
 
 
-        // Lampara 2
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(150.0f, 0.0f, 1500.0f));
+        // Lampara 2 (Derecha )
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(180.0f, 0.0f, 1700.0f));
         modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        modelOp = glm::scale(modelOp, glm::vec3(90.0f)); 
         staticShader.setMat4("model", modelOp);
         Lampara.Draw(staticShader);
 
@@ -1494,10 +1542,10 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         
         // 1) Fachada exterior
-        camera.Position = glm::vec3(0.0f, 50.0f, 1880.0f);
+        camera.Position = glm::vec3(0.0f, 130.0f, 2180.0f);
         camera.Yaw = -90.0f; 
-        camera.Pitch = -2.0f; 
-        camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); 
+        camera.Pitch = -5.0f; 
+        camera.Front = glm::normalize(glm::vec3(0.0f, sin(glm::radians(-5.0f)), -cos(glm::radians(-5.0f))));
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {

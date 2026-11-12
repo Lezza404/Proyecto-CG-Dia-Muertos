@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 FragColor;
 
-#define NUMBER 11
+#define NUMBER 13
 #define NUMBER_SPOT 1
 
 in vec3 FragPos;
