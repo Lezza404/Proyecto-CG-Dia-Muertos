@@ -54,6 +54,25 @@ double deltaTime = 0.0f,
 lastFrame = 0.0f;
 
 
+//Bruja levitación
+float levitaBruja = 0.0f;
+
+//Esqueleto movimiento 
+float movEsqueleto_y = 0.0f;
+
+
+// Variables para el vuelo automático
+float movEscoba_x = -220.0f;
+float movEscoba_y = 100.0f;
+float movEscoba_z = 200.0f;
+float rotEscoba_pitch = 0.0f;
+float rotEscoba_yaw = 0.0f;
+float rotEscoba_roll = 0.0f;
+float tiempoVuelo = 0.0f;
+bool escobaVueloErratico = true;
+
+
+
 
 // Variables para KeyFrames
 float posX = 0.0f, 
@@ -241,6 +260,46 @@ void animate(void) {
             i_curr_steps++;
         }
     }
+
+    // levitación para la bruja
+    levitaBruja = sin(tiempo * 2.5f) * 5.0f;
+
+
+    //Escoba
+    if (escobaVueloErratico) {
+        tiempoVuelo += 0.08f;
+
+        float prev_x = movEscoba_x;
+        float prev_z = movEscoba_z;
+
+        movEscoba_x = sin(tiempoVuelo * 0.8f) * 900.0f + cos(tiempoVuelo * 0.4f) * 400.0f;
+        movEscoba_z = cos(tiempoVuelo * 0.6f) * 900.0f + sin(tiempoVuelo * 0.3f) * 400.0f;
+        movEscoba_y = 350.0f + sin(tiempoVuelo * 1.5f) * 150.0f;
+
+        float dir_x = movEscoba_x - prev_x;
+        float dir_z = movEscoba_z - prev_z;
+
+        if (dir_x != 0.0f || dir_z != 0.0f) {
+            rotEscoba_yaw = glm::degrees(atan2(dir_x, dir_z));
+        }
+
+        rotEscoba_pitch = cos(tiempoVuelo * 1.5f) * 20.0f;
+        rotEscoba_roll = sin(tiempoVuelo * 2.0f) * 15.0f;
+    }
+    else {
+        glm::vec3 posFinalEscoba = glm::vec3(-250.0f, 75.0f + levitaBruja, 220.0f);
+
+        movEscoba_x = glm::mix(movEscoba_x, posFinalEscoba.x, 0.04f);
+        movEscoba_y = glm::mix(movEscoba_y, posFinalEscoba.y, 0.04f);
+        movEscoba_z = glm::mix(movEscoba_z, posFinalEscoba.z, 0.04f);
+        rotEscoba_yaw = glm::mix(rotEscoba_yaw, 45.0f, 0.05f);
+        rotEscoba_pitch = glm::mix(rotEscoba_pitch, -90.0f, 0.05f);
+        rotEscoba_roll = glm::mix(rotEscoba_roll, 0.0f, 0.05f);
+    }
+
+
+    // Animación del esqueleto emergiendo de la tumba
+    movEsqueleto_y =-90.0f + fmax(0.0f, sin(tiempo * 1.2f) * 60.0f);
 }
 
 
@@ -323,7 +382,10 @@ int main() {
     Model Pila_Huesos("resources/objects/Pila_Huesos/bone-pile.obj");
     Model Fantasma("resources/objects/Fantasma/Floating+Cape+1.obj");
     Model Ofrenda("resources/objects/Ofrenda/Ofrenda.obj");
-    
+    Model Bruja("resources/objects/Bruja/witch.obj");
+    Model Escoba("resources/objects/Escoba/witch-broom.obj");
+    Model Esqueleto("resources/objects/Esqueleto/human-skeleton.obj");
+
 
     // Inicialización de KeyFrames en 0
     for (int i = 0; i < MAX_FRAMES; i++) {
@@ -553,6 +615,33 @@ int main() {
         Ofrenda.Draw(staticShader);
 
 
+        // Bruja
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-220.0f, 0.0f + levitaBruja, 200.0f)); 
+        modelOp = glm::rotate(modelOp, glm::radians(330.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
+        modelOp = glm::scale(modelOp, glm::vec3(100.0f));                                   
+        staticShader.setMat4("model", modelOp);
+        Bruja.Draw(staticShader);
+
+
+        //Escoba
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(movEscoba_x, movEscoba_y, movEscoba_z));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEscoba_yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEscoba_pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEscoba_roll), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+        modelOp = glm::scale(modelOp, glm::vec3(100.0f));
+        staticShader.setMat4("model", modelOp);
+        Escoba.Draw(staticShader);
+
+
+        //Esqueleto
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1200.0f, movEsqueleto_y, -1350.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Cambia el ángulo si quieres que rote hacia el frente
+        modelOp = glm::scale(modelOp, glm::vec3(80.0f));
+        staticShader.setMat4("model", modelOp);
+        Esqueleto.Draw(staticShader);
+
         // Fantasma
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(movFantasma_x, 15.0f + alturaFantasma, movFantasma_z));
         modelOp = glm::rotate(modelOp, glm::radians(orientaFantasma), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -656,24 +745,49 @@ int main() {
 
 
         // Calavera de azucar 1
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-25.0f, 0.0f, 300.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(50.0f)); 
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, 0.0f, 400.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(90.0f)); 
         staticShader.setMat4("model", modelOp);
         Calavera_azucar.Draw(staticShader);
 
 
         // Calavera de azucar 2
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(25.0f, 0.0f, 300.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(50.0f));
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 400.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(90.0f));
         staticShader.setMat4("model", modelOp);
         Calavera_azucar.Draw(staticShader);
 
 
-        //Pila de Huesos
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-250.0f, 0.0f, 200.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(50.0f));
-        staticShader.setMat4("model", modelOp);
-        Pila_Huesos.Draw(staticShader);
+        glm::vec3 posPilaHuesos[12] = {
+            glm::vec3(-1350.0f, 0.0f, -1150.0f), // Zona superior izquierda
+            glm::vec3(1150.0f, 0.0f, -1250.0f), // Zona superior derecha 
+            glm::vec3(-500.0f, 0.0f, -1050.0f), // Pasillo central superior
+            glm::vec3(500.0f, 0.0f, -1050.0f), // Pasillo central superior 
+            glm::vec3(-1300.0f, 0.0f,  -200.0f), // Lateral izquierdo 
+            glm::vec3(1300.0f, 0.0f,  -200.0f), // Lateral derecho
+            glm::vec3(-850.0f, 0.0f,   200.0f), // Zona central-izquierda 
+            glm::vec3(850.0f, 0.0f,   200.0f), // Zona central-derecha 
+            glm::vec3(-1250.0f, 0.0f,   800.0f), // Lateral izquierdo 
+            glm::vec3(1250.0f, 0.0f,   800.0f), // Lateral derecho 
+            glm::vec3(-550.0f, 0.0f,   950.0f), // Cerca de la entrada 
+            glm::vec3(550.0f, 0.0f,   950.0f)  // Cerca de la entrada
+        };
+
+        float rotPilaHuesos[12] = {
+            35.0f, 120.0f, 210.0f, 75.0f, 15.0f, 240.0f, 180.0f, 90.0f, 305.0f, 160.0f, 45.0f, 290.0f
+        };
+
+        float escalaPilaHuesos[12] = {
+            110.0f, 115.0f, 112.0f, 110.0f, 115.0f, 111.0f, 114.0f, 110.0f, 115.0f, 112.0f, 110.0f, 113.0f
+        };
+
+        for (int i = 0; i < 12; i++) {
+            modelOp = glm::translate(glm::mat4(1.0f), posPilaHuesos[i]);
+            modelOp = glm::rotate(modelOp, glm::radians(rotPilaHuesos[i]), glm::vec3(0.0f, 1.0f, 0.0f));
+            modelOp = glm::scale(modelOp, glm::vec3(escalaPilaHuesos[i]));
+            staticShader.setMat4("model", modelOp);
+            Pila_Huesos.Draw(staticShader);
+        }
 
         
         // Árboles traseros
@@ -1398,6 +1512,13 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
         camera.Position = glm::vec3(0.0f, 35.0f, 60.0f);
     }
 
+
+    if (key == GLFW_KEY_B && action == GLFW_PRESS) {
+        escobaVueloErratico = false; // Va hacia la bruja y se detiene ahí
+    }
+    if (key == GLFW_KEY_V && action == GLFW_PRESS) {
+        escobaVueloErratico = true;  // Retoma el vuelo 
+    }
     
 }
 
