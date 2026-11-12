@@ -880,16 +880,18 @@ int main() {
         Lampara.Draw(staticShader);
 
 
-        // Calavera de azucar 1
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-30.0f, 0.0f, 400.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(90.0f)); 
+        // Calavera de azucar 1 (Lado izquierdo, al frente de la ofrenda)
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-155.0f, 0.0f, 415.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(15.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(140.0f));
         staticShader.setMat4("model", modelOp);
         Calavera_azucar.Draw(staticShader);
 
 
-        // Calavera de azucar 2
-        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(100.0f, 0.0f, 400.0f));
-        modelOp = glm::scale(modelOp, glm::vec3(90.0f));
+        // Calavera de azucar 2 (Lado derecho, al frente de la ofrenda)
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(155.0f, 0.0f, 415.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(-15.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(140.0f));
         staticShader.setMat4("model", modelOp);
         Calavera_azucar.Draw(staticShader);
 
@@ -1645,8 +1647,8 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     }
 
     if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
-        // 3) Enfrente de la ofrenda central (sin que el esqueleto la tape)
-        camera.Position = glm::vec3(0.0f, 85.0f, 560.0f);
+        // 3) Enfrente de la ofrenda central encuadrando también ambas calaveras
+        camera.Position = glm::vec3(0.0f, 85.0f, 650.0f);
         camera.Yaw = -90.0f;
         camera.Pitch = -4.0f;
         camera.Front = glm::normalize(glm::vec3(0.0f, sin(glm::radians(-4.0f)), -cos(glm::radians(-4.0f))));
