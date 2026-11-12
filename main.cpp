@@ -74,13 +74,26 @@ bool escobaVueloErratico = true;
 
 
 
-// Variables para KeyFrames
-float posX = 0.0f, 
-      posY = 0.0f, 
-      posZ = 0.0f;
-float incX = 0.0f, 
-      incY = 0.0f, 
-      incZ = 0.0f;
+// Variables para KeyFrames (Baile articulado)
+float posX = 0.0f,
+posY = 0.0f,
+posZ = 0.0f,
+giroTorso = 0.0f,
+rotCabeza = 0.0f,
+rotBrazoDer = 0.0f,
+rotBrazoIzq = 0.0f,
+rotPiernaDer = 0.0f,
+rotPiernaIzq = 0.0f;
+
+float incX = 0.0f,
+incY = 0.0f,
+incZ = 0.0f,
+incGiroTorso = 0.0f,
+incCabeza = 0.0f,
+incBrazoDer = 0.0f,
+incBrazoIzq = 0.0f,
+incPiernaDer = 0.0f,
+incPiernaIzq = 0.0f;
 
 
 // Para la animación del viento
@@ -98,7 +111,7 @@ int estadoFantasma = 1;
 
 
 #define MAX_FRAMES 9
-int i_max_steps = 60;
+int i_max_steps = 18;
 int i_curr_steps = 0;
 
 
@@ -106,28 +119,28 @@ typedef struct _frame {
     float posX;
     float posY;
     float posZ;
+    float giroTorso;
+    float rotCabeza;
+    float rotBrazoDer;
+    float rotBrazoIzq;
+    float rotPiernaDer;
+    float rotPiernaIzq;
 } FRAME;
 
 
 FRAME KeyFrame[MAX_FRAMES];
-int FrameIndex = 0;
+int FrameIndex = 9;
 bool play = false;
 int playIndex = 0;
 
 
-void saveFrame(void) {
-    std::cout << "Frame Index = " << FrameIndex << std::endl;
-    KeyFrame[FrameIndex].posX = posX;
-    KeyFrame[FrameIndex].posY = posY;
-    KeyFrame[FrameIndex].posZ = posZ;
-    FrameIndex++;
-}
-
-
 void resetElements(void) {
-    posX = KeyFrame[0].posX;
-    posY = KeyFrame[0].posY;
-    posZ = KeyFrame[0].posZ;
+    giroTorso = KeyFrame[0].giroTorso;
+    rotCabeza = KeyFrame[0].rotCabeza;
+    rotBrazoDer = KeyFrame[0].rotBrazoDer;
+    rotBrazoIzq = KeyFrame[0].rotBrazoIzq;
+    rotPiernaDer = KeyFrame[0].rotPiernaDer;
+    rotPiernaIzq = KeyFrame[0].rotPiernaIzq;
 }
 
 
@@ -135,6 +148,12 @@ void interpolation(void) {
     incX = (KeyFrame[playIndex + 1].posX - KeyFrame[playIndex].posX) / i_max_steps;
     incY = (KeyFrame[playIndex + 1].posY - KeyFrame[playIndex].posY) / i_max_steps;
     incZ = (KeyFrame[playIndex + 1].posZ - KeyFrame[playIndex].posZ) / i_max_steps;
+    incGiroTorso = (KeyFrame[playIndex + 1].giroTorso - KeyFrame[playIndex].giroTorso) / i_max_steps;
+    incCabeza = (KeyFrame[playIndex + 1].rotCabeza - KeyFrame[playIndex].rotCabeza) / i_max_steps;
+    incBrazoDer = (KeyFrame[playIndex + 1].rotBrazoDer - KeyFrame[playIndex].rotBrazoDer) / i_max_steps;
+    incBrazoIzq = (KeyFrame[playIndex + 1].rotBrazoIzq - KeyFrame[playIndex].rotBrazoIzq) / i_max_steps;
+    incPiernaDer = (KeyFrame[playIndex + 1].rotPiernaDer - KeyFrame[playIndex].rotPiernaDer) / i_max_steps;
+    incPiernaIzq = (KeyFrame[playIndex + 1].rotPiernaIzq - KeyFrame[playIndex].rotPiernaIzq) / i_max_steps;
 }
 
 
@@ -257,6 +276,12 @@ void animate(void) {
             posX += incX;
             posY += incY;
             posZ += incZ;
+            giroTorso += incGiroTorso;
+            rotCabeza += incCabeza;
+            rotBrazoDer += incBrazoDer;
+            rotBrazoIzq += incBrazoIzq;
+            rotPiernaDer += incPiernaDer;
+            rotPiernaIzq += incPiernaIzq;
             i_curr_steps++;
         }
     }
@@ -389,10 +414,25 @@ int main() {
 
     ModelAnim Mujer1("resources/objects/Mujer1/Shoved.dae");
     Mujer1.initShaders(animShader.ID);
-    
-    
-    // Inicialización de KeyFrames en 0
-    
+    // Modelos articulados para animación por KeyFrames
+    Model BailarinTorso("resources/objects/Bailarin/Torso.obj");
+    Model BailarinCabeza("resources/objects/Bailarin/Cabeza.obj");
+    Model BailarinBrazoDer("resources/objects/Bailarin/BrazoDer.obj");
+    Model BailarinBrazoIzq("resources/objects/Bailarin/BrazoIzq.obj");
+    Model BailarinPiernaDer("resources/objects/Bailarin/PiernaDer.obj");
+    Model BailarinPiernaIzq("resources/objects/Bailarin/PiernaIzq.obj");
+
+    // Precarga de la coreografía (posX, posY, posZ, giroTorso, cabeza, brazoDer, brazoIzq, piernaDer, piernaIzq)
+    KeyFrame[0] = { 0.0f,  0.0f,   0.0f,   0.0f,   0.0f,    0.0f,    0.0f,   0.0f,   0.0f };
+    KeyFrame[1] = { -25.0f, 12.0f,   0.0f, -15.0f,  10.0f, -110.0f,   35.0f,  30.0f, -20.0f };
+    KeyFrame[2] = { 0.0f,  0.0f,   0.0f,   0.0f,  -8.0f,  -40.0f,  -40.0f,   0.0f,   0.0f };
+    KeyFrame[3] = { 25.0f, 12.0f,   0.0f,  15.0f, -10.0f,   35.0f, -110.0f, -20.0f,  30.0f };
+    KeyFrame[4] = { 0.0f, 20.0f, -15.0f,   0.0f,  12.0f, -140.0f, -140.0f,  25.0f,  25.0f };
+    KeyFrame[5] = { -25.0f,  8.0f,   0.0f, -20.0f,  -8.0f,  -95.0f,   45.0f, -25.0f,  35.0f };
+    KeyFrame[6] = { 25.0f,  8.0f,   0.0f,  20.0f,   8.0f,   45.0f,  -95.0f,  35.0f, -25.0f };
+    KeyFrame[7] = { 0.0f, 18.0f,  15.0f, 180.0f,   0.0f, -120.0f, -120.0f,  15.0f, -15.0f };
+    KeyFrame[8] = { 0.0f,  0.0f,   0.0f, 360.0f,   0.0f,    0.0f,    0.0f,   0.0f,   0.0f };
+
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
         KeyFrame[i].posY = 0;
@@ -720,6 +760,54 @@ int main() {
 
         staticShader.use();
 
+        // ------------------------------------------------------------------
+        // Personaje articulado animado por KeyFrames (Centro del pasillo)
+        // ------------------------------------------------------------------
+        glm::mat4 modelTemp = glm::mat4(1.0f);
+        float escalaBailarin = 95.0f;
+
+        // 1. Torso (Padre de la jerarquía, bajado a 1.05f para que los pies toquen Y = 0)
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f + posX, (1.05f * escalaBailarin) + posY, 850.0f + posZ));
+        modelOp = glm::rotate(modelOp, glm::radians(giroTorso), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelTemp = modelOp;
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinTorso.Draw(staticShader);
+
+        // 2. Cabeza
+        modelOp = glm::translate(modelTemp, glm::vec3(0.0f, 0.42f * escalaBailarin, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotCabeza), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinCabeza.Draw(staticShader);
+
+        // 3. Brazo Derecho
+        modelOp = glm::translate(modelTemp, glm::vec3(-0.195f * escalaBailarin, 0.32f * escalaBailarin, -0.02f * escalaBailarin));
+        modelOp = glm::rotate(modelOp, glm::radians(rotBrazoDer), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinBrazoDer.Draw(staticShader);
+
+        // 4. Brazo Izquierdo
+        modelOp = glm::translate(modelTemp, glm::vec3(0.195f * escalaBailarin, 0.32f * escalaBailarin, -0.02f * escalaBailarin));
+        modelOp = glm::rotate(modelOp, glm::radians(rotBrazoIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinBrazoIzq.Draw(staticShader);
+
+        // 5. Pierna Derecha
+        modelOp = glm::translate(modelTemp, glm::vec3(-0.105f * escalaBailarin, -0.145f * escalaBailarin, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotPiernaDer), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinPiernaDer.Draw(staticShader);
+
+        // 6. Pierna Izquierda
+        modelOp = glm::translate(modelTemp, glm::vec3(0.105f * escalaBailarin, -0.145f * escalaBailarin, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotPiernaIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
+        staticShader.setMat4("model", modelOp);
+        BailarinPiernaIzq.Draw(staticShader);
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
@@ -1549,16 +1637,34 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     }
 
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
-        
-        // 2) Cerca de un elemento con animación
-        camera.Position = glm::vec3(-30.0f, 25.0f, 20.0f);
+        // 2) Enfrente del esqueleto articulado (Z = 850)
+        camera.Position = glm::vec3(0.0f, 95.0f, 1130.0f);
+        camera.Yaw = -90.0f;
+        camera.Pitch = -2.0f;
+        camera.Front = glm::normalize(glm::vec3(0.0f, sin(glm::radians(-2.0f)), -cos(glm::radians(-2.0f))));
     }
 
     if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
-        
-        // 3) Cerca del elemento de gran detalle (Ofrenda central)
-        camera.Position = glm::vec3(0.0f, 35.0f, 60.0f);
+        // 3) Enfrente de la ofrenda central (sin que el esqueleto la tape)
+        camera.Position = glm::vec3(0.0f, 85.0f, 560.0f);
+        camera.Yaw = -90.0f;
+        camera.Pitch = -4.0f;
+        camera.Front = glm::normalize(glm::vec3(0.0f, sin(glm::radians(-4.0f)), -cos(glm::radians(-4.0f))));
     }
+
+    // Iniciar / Detener baile por KeyFrames con tecla P
+    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+        if (!play && FrameIndex > 1) {
+            resetElements();
+            interpolation();
+            play = true;
+            playIndex = 0;
+            i_curr_steps = 0;
+        }
+        else {
+            play = false;
+        }
+    }  
 
 
     if (key == GLFW_KEY_B && action == GLFW_PRESS) {
