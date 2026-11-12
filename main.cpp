@@ -360,7 +360,7 @@ int main() {
     ma_sound_set_looping(&musicaFondo, MA_TRUE);
 
     // Para ajustar el volumen de la canción
-    ma_sound_set_volume(&musicaFondo, 0.1f);
+    ma_sound_set_volume(&musicaFondo, 0.5f);
 
     // Se inicia la reproducción
     ma_sound_start(&musicaFondo);
