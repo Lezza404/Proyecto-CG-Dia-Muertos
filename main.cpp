@@ -32,10 +32,12 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mods);
 void animate(void);
 void getResolution(void);
 
+
 // Configuración de ventana
 unsigned int SCR_WIDTH = 800;
 unsigned int SCR_HEIGHT = 600;
 GLFWmonitor* monitors;
+
 
 // Cámara sintética (inicia sobre el piso)
 Camera camera(glm::vec3(0.0f, 40.0f, 50.0f));
@@ -43,6 +45,7 @@ float MovementSpeed = 2.0f;
 GLfloat lastX = SCR_WIDTH / 2.0f,
         lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+
 
 // Control de tiempo (60 FPS)
 const int FPS = 60;
@@ -79,16 +82,19 @@ int estadoFantasma = 1;
 int i_max_steps = 60;
 int i_curr_steps = 0;
 
+
 typedef struct _frame {
     float posX;
     float posY;
     float posZ;
 } FRAME;
 
+
 FRAME KeyFrame[MAX_FRAMES];
 int FrameIndex = 0;
 bool play = false;
 int playIndex = 0;
+
 
 void saveFrame(void) {
     std::cout << "Frame Index = " << FrameIndex << std::endl;
@@ -98,17 +104,20 @@ void saveFrame(void) {
     FrameIndex++;
 }
 
+
 void resetElements(void) {
     posX = KeyFrame[0].posX;
     posY = KeyFrame[0].posY;
     posZ = KeyFrame[0].posZ;
 }
 
+
 void interpolation(void) {
     incX = (KeyFrame[playIndex + 1].posX - KeyFrame[playIndex].posX) / i_max_steps;
     incY = (KeyFrame[playIndex + 1].posY - KeyFrame[playIndex].posY) / i_max_steps;
     incZ = (KeyFrame[playIndex + 1].posZ - KeyFrame[playIndex].posZ) / i_max_steps;
 }
+
 
 void animate(void) {
     // Variable de tiempo para las animaciones
@@ -355,7 +364,7 @@ int main() {
 
 
     // ------------------------------------------------------------------
-    // Ciclo de renderizado (Render Loop)
+    // Ciclo de renderizado 
     // ------------------------------------------------------------------
     while (!glfwWindowShouldClose(window)) {
         skyboxShader.setInt("skybox", 0);
@@ -1348,8 +1357,9 @@ int main() {
     return 0;
 }
 
+
 // ------------------------------------------------------------------
-// Control de Teclado y Cámara
+// Control de teclado y cámara
 // ------------------------------------------------------------------
 void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -1365,20 +1375,23 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, (float)deltaTime * MovementSpeed);
 
+
     // Posiciones rápidas de cámara (teclas 1, 2 y 3)
     if (key == GLFW_KEY_1 && action == GLFW_PRESS) {
         
-        // 1) Puerta principal / Fachada exterior
+        // 1) Fachada exterior
         camera.Position = glm::vec3(0.0f, 50.0f, 1880.0f);
-        camera.Yaw = -90.0f; //Orienta hacia el eje -Z (hacia el arco)
-        camera.Pitch = -2.0f; //Ligera inclinación hacia la entrada
-        camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); //Vector de vista hacia el interior
+        camera.Yaw = -90.0f; 
+        camera.Pitch = -2.0f; 
+        camera.Front = glm::vec3(0.0f, 0.0f, -1.0f); 
     }
+
     if (key == GLFW_KEY_2 && action == GLFW_PRESS) {
         
         // 2) Cerca de un elemento con animación
         camera.Position = glm::vec3(-30.0f, 25.0f, 20.0f);
     }
+
     if (key == GLFW_KEY_3 && action == GLFW_PRESS) {
         
         // 3) Cerca del elemento de gran detalle (Ofrenda central)
@@ -1388,9 +1401,11 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
     
 }
 
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
+
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     if (firstMouse) {
@@ -1407,6 +1422,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
+
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(yoffset);
