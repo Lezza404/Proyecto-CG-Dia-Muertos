@@ -18,17 +18,21 @@ uniform mat4 bones[MAX_BONES];
 
 void main()
 {
-	mat4 bone_transform = bones[bone_ids[0]] * weights[0];
-		bone_transform += bones[bone_ids[1]] * weights[1];
-		bone_transform += bones[bone_ids[2]] * weights[2];
-		bone_transform += bones[bone_ids[3]] * weights[3];
-		
-	vec4 boned_position = bone_transform * vec4(aPos, 1.0); // transformed by bones
+    mat4 bone_transform = bones[bone_ids[0]] * weights[0];
+    bone_transform += bones[bone_ids[1]] * weights[1];
+    bone_transform += bones[bone_ids[2]] * weights[2];
+    bone_transform += bones[bone_ids[3]] * weights[3];
 
-    FragPos = vec3(model * bone_transform);
-    //Normal = mat3(transpose(inverse(model))) * aNormal; // Calcular normales fuera del shader 
-	Normal = vec3 (bone_transform * vec4 (aNormal, 0.0)); // A lo mejor se cambia
-    
+    float totalWeight = weights[0] + weights[1] + weights[2] + weights[3];
+    if (totalWeight < 0.001) {
+        bone_transform = mat4(1.0);
+    }
+
+    vec4 boned_position = bone_transform * vec4(aPos, 1.0);
+
+    FragPos = vec3(model * boned_position);
+    Normal = mat3(transpose(inverse(model))) * vec3(bone_transform * vec4(aNormal, 0.0));
+
     gl_Position = projection * view * model * boned_position;
-	TexCoords = aTexCoords;
+    TexCoords = aTexCoords;
 }

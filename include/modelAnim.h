@@ -88,7 +88,7 @@ private:
     void loadModel(string const &path)
     {
         // read file via ASSIMP
-        scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights);
         // check for errors
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         {
@@ -333,8 +333,7 @@ private:
 			}
 		}
 
-		assert(0);
-		return 0;
+		return (p_node_anim->mNumPositionKeys >= 2) ? (p_node_anim->mNumPositionKeys - 2) : 0;
 	}
 
 	uint findRotation(float p_animation_time, const aiNodeAnim* p_node_anim)
@@ -348,8 +347,7 @@ private:
 			}
 		}
 
-		assert(0);
-		return 0;
+		return (p_node_anim->mNumRotationKeys >= 2) ? (p_node_anim->mNumRotationKeys - 2) : 0;
 	}
 
 	uint findScaling(float p_animation_time, const aiNodeAnim* p_node_anim)
@@ -363,8 +361,7 @@ private:
 			}
 		}
 
-		assert(0);
-		return 0;
+		return (p_node_anim->mNumScalingKeys >= 2) ? (p_node_anim->mNumScalingKeys - 2) : 0;;
 	}
 
 	aiVector3D calcInterpolatedPosition(float p_animation_time, const aiNodeAnim* p_node_anim)
@@ -381,7 +378,8 @@ private:
 		float delta_time = (float)(p_node_anim->mPositionKeys[next_position_index].mTime - p_node_anim->mPositionKeys[position_index].mTime);
 		// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
 		float factor = (p_animation_time - (float)p_node_anim->mPositionKeys[position_index].mTime) / delta_time;
-		assert(factor >= 0.0f && factor <= 1.0f);
+		if (factor > 1.0f) factor = 1.0f;
+		if (factor < 0.0f) factor = 0.0f;
 		aiVector3D start = p_node_anim->mPositionKeys[position_index].mValue;
 		aiVector3D end = p_node_anim->mPositionKeys[next_position_index].mValue;
 		aiVector3D delta = end - start;
@@ -411,7 +409,8 @@ private:
 		//cout << "animation_time - mRotationKeys[rotation_index].mTime: " << (p_animation_time - (float)p_node_anim->mRotationKeys[rotation_index].mTime) << endl;
 		//cout << "factor: " << factor << endl << endl << endl;
 
-		assert(factor >= 0.0f && factor <= 1.0f);
+		if (factor > 1.0f) factor = 1.0f;
+		if (factor < 0.0f) factor = 0.0f;
 		aiQuaternion start_quat = p_node_anim->mRotationKeys[rotation_index].mValue;
 		aiQuaternion end_quat = p_node_anim->mRotationKeys[next_rotation_index].mValue;
 
@@ -433,7 +432,8 @@ private:
 		// ������ = (���� ������� ������ �� ������ �������� ��������� �����) / �� ���� ����� �������
 		float  factor = (p_animation_time - (float)p_node_anim->mScalingKeys[scaling_index].mTime) / delta_time;
 		//cout << "p_animation_time: " << p_animation_time << " " << "mTime: " << (float)p_node_anim->mScalingKeys[scaling_index].mTime << endl << endl << endl;
-		assert(factor >= 0.0f && factor <= 1.0f);
+		if (factor > 1.0f) factor = 1.0f;
+		if (factor < 0.0f) factor = 0.0f;
 		aiVector3D start = p_node_anim->mScalingKeys[scaling_index].mValue;
 		aiVector3D end = p_node_anim->mScalingKeys[next_scaling_index].mValue;
 		aiVector3D delta = end - start;
