@@ -1,6 +1,9 @@
 /*---------------------------------------------------------*/
 /* ----------- Proyecto Final: Panteón Oaxaca -------------*/
-/*-----------------    Semestre 2027-1   ------------------*/
+/*-----------------    Semestre 2027-1  ------------------*/
+/*-----------------       Integrantes:   ------------------*/
+/*--------       Juárez Juárez María José        ----------*/
+/*--------      Osnaya Valencia Victor Damian     ----------*/
 /*---------------------------------------------------------*/
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
@@ -70,6 +73,16 @@ float rotEscoba_yaw = 0.0f;
 float rotEscoba_roll = 0.0f;
 float tiempoVuelo = 0.0f;
 bool escobaVueloErratico = true;
+
+
+// Variables de Espada
+float movEspada_x = 0.0f;
+float movEspada_y = 50.0f; 
+float movEspada_z = 0.0f;
+float rotEspada_pitch = 0.0f;
+float rotEspada_yaw = 0.0f;
+float rotEspada_roll = 0.0f;
+float tiempoVueloEspada = 0.0f;
 
 
 
@@ -409,6 +422,24 @@ void animate(void) {
 
     // Animación del esqueleto emergiendo de la tumba
     movEsqueleto_y =-90.0f + fmax(0.0f, sin(tiempo * 1.2f) * 60.0f);
+
+
+    // Animación de la Espada
+    tiempoVueloEspada += 0.06f; 
+
+    float prev_espada_x = movEspada_x;
+    float prev_espada_z = movEspada_z;
+    movEspada_x = sin(tiempoVueloEspada * 0.7f) * 700.0f + cos(tiempoVueloEspada * 0.5f) * 300.0f;
+    movEspada_z = cos(tiempoVueloEspada * 0.5f) * 700.0f + sin(tiempoVueloEspada * 0.4f) * 300.0f;
+    movEspada_y = 60.0f + sin(tiempoVueloEspada * 1.2f) * 25.0f; 
+    float dir_espada_x = movEspada_x - prev_espada_x;
+    float dir_espada_z = movEspada_z - prev_espada_z;
+    if (dir_espada_x != 0.0f || dir_espada_z != 0.0f) {
+        rotEspada_yaw = glm::degrees(atan2(dir_espada_x, dir_espada_z));
+    }
+
+    rotEspada_pitch = cos(tiempoVueloEspada * 1.5f) * 25.0f;
+    rotEspada_roll = sin(tiempoVueloEspada * 2.0f) * 20.0f;
 }
 
 
@@ -494,6 +525,7 @@ int main() {
     Model Bruja("resources/objects/Bruja/witch.obj");
     Model Escoba("resources/objects/Escoba/witch-broom.obj");
     Model Esqueleto("resources/objects/Esqueleto/human-skeleton.obj");
+    Model Espada("resources/objects/Espada/fantasy-sword.obj");
 
 
     ModelAnim Mujer1("resources/objects/Mujer1/Shoved.dae");
@@ -798,10 +830,19 @@ int main() {
         staticShader.setMat4("model", modelOp);
         Escoba.Draw(staticShader);
 
+        //Espada
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(movEspada_x, movEspada_y, movEspada_z));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEspada_yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEspada_pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(rotEspada_roll), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(100.0f)); 
+        staticShader.setMat4("model", modelOp);
+        Espada.Draw(staticShader);
+
 
         //Esqueleto
         modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(-1200.0f, movEsqueleto_y, -1350.0f));
-        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Cambia el ángulo si quieres que rote hacia el frente
+        modelOp = glm::rotate(modelOp, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)); 
         modelOp = glm::scale(modelOp, glm::vec3(80.0f));
         staticShader.setMat4("model", modelOp);
         Esqueleto.Draw(staticShader);
