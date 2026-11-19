@@ -156,6 +156,62 @@ void interpolation(void) {
     incPiernaIzq = (KeyFrame[playIndex + 1].rotPiernaIzq - KeyFrame[playIndex].rotPiernaIzq) / i_max_steps;
 }
 
+// ------------------------------------------------------------------
+// Variables para KeyFrames 2 (Abuela junto a la ofrenda)
+// ------------------------------------------------------------------
+float abuelaPosX = 0.0f,
+abuelaPosY = 0.0f,
+abuelaPosZ = 0.0f,
+abuelaGiroTorso = 0.0f,
+abuelaRotCabeza = 0.0f,
+abuelaRotBrazoDer = 0.0f,
+abuelaRotBrazoIzq = 0.0f,
+abuelaRotPiernaDer = 0.0f,
+abuelaRotPiernaIzq = 0.0f;
+
+float abuelaIncX = 0.0f,
+abuelaIncY = 0.0f,
+abuelaIncZ = 0.0f,
+abuelaIncGiroTorso = 0.0f,
+abuelaIncCabeza = 0.0f,
+abuelaIncBrazoDer = 0.0f,
+abuelaIncBrazoIzq = 0.0f,
+abuelaIncPiernaDer = 0.0f,
+abuelaIncPiernaIzq = 0.0f;
+
+#define MAX_FRAMES_ABUELA 7
+int i_max_steps_abuela = 25;
+int i_curr_steps_abuela = 0;
+
+FRAME KeyFrameAbuela[MAX_FRAMES_ABUELA];
+int FrameIndexAbuela = 7;
+bool playAbuela = false;
+int playIndexAbuela = 0;
+
+void resetElementsAbuela(void) {
+    abuelaPosX = KeyFrameAbuela[0].posX;
+    abuelaPosY = KeyFrameAbuela[0].posY;
+    abuelaPosZ = KeyFrameAbuela[0].posZ;
+    abuelaGiroTorso = KeyFrameAbuela[0].giroTorso;
+    abuelaRotCabeza = KeyFrameAbuela[0].rotCabeza;
+    abuelaRotBrazoDer = KeyFrameAbuela[0].rotBrazoDer;
+    abuelaRotBrazoIzq = KeyFrameAbuela[0].rotBrazoIzq;
+    abuelaRotPiernaDer = KeyFrameAbuela[0].rotPiernaDer;
+    abuelaRotPiernaIzq = KeyFrameAbuela[0].rotPiernaIzq;
+}
+
+void interpolationAbuela(void) {
+    abuelaIncX = (KeyFrameAbuela[playIndexAbuela + 1].posX - KeyFrameAbuela[playIndexAbuela].posX) / i_max_steps_abuela;
+    abuelaIncY = (KeyFrameAbuela[playIndexAbuela + 1].posY - KeyFrameAbuela[playIndexAbuela].posY) / i_max_steps_abuela;
+    abuelaIncZ = (KeyFrameAbuela[playIndexAbuela + 1].posZ - KeyFrameAbuela[playIndexAbuela].posZ) / i_max_steps_abuela;
+    abuelaIncGiroTorso = (KeyFrameAbuela[playIndexAbuela + 1].giroTorso - KeyFrameAbuela[playIndexAbuela].giroTorso) / i_max_steps_abuela;
+    abuelaIncCabeza = (KeyFrameAbuela[playIndexAbuela + 1].rotCabeza - KeyFrameAbuela[playIndexAbuela].rotCabeza) / i_max_steps_abuela;
+    abuelaIncBrazoDer = (KeyFrameAbuela[playIndexAbuela + 1].rotBrazoDer - KeyFrameAbuela[playIndexAbuela].rotBrazoDer) / i_max_steps_abuela;
+    abuelaIncBrazoIzq = (KeyFrameAbuela[playIndexAbuela + 1].rotBrazoIzq - KeyFrameAbuela[playIndexAbuela].rotBrazoIzq) / i_max_steps_abuela;
+    abuelaIncPiernaDer = (KeyFrameAbuela[playIndexAbuela + 1].rotPiernaDer - KeyFrameAbuela[playIndexAbuela].rotPiernaDer) / i_max_steps_abuela;
+    abuelaIncPiernaIzq = (KeyFrameAbuela[playIndexAbuela + 1].rotPiernaIzq - KeyFrameAbuela[playIndexAbuela].rotPiernaIzq) / i_max_steps_abuela;
+}
+
 
 void animate(void) {
     // Variable de tiempo para las animaciones
@@ -283,6 +339,34 @@ void animate(void) {
             rotPiernaDer += incPiernaDer;
             rotPiernaIzq += incPiernaIzq;
             i_curr_steps++;
+        }
+    }
+
+    // Interpolación de KeyFrames 2 (Abuela)
+    if (playAbuela) {
+        if (i_curr_steps_abuela >= i_max_steps_abuela) {
+            playIndexAbuela++;
+            if (playIndexAbuela > FrameIndexAbuela - 2) {
+                std::cout << "Animacion Abuela terminada" << std::endl;
+                playIndexAbuela = 0;
+                playAbuela = false;
+            }
+            else {
+                i_curr_steps_abuela = 0;
+                interpolationAbuela();
+            }
+        }
+        else {
+            abuelaPosX += abuelaIncX;
+            abuelaPosY += abuelaIncY;
+            abuelaPosZ += abuelaIncZ;
+            abuelaGiroTorso += abuelaIncGiroTorso;
+            abuelaRotCabeza += abuelaIncCabeza;
+            abuelaRotBrazoDer += abuelaIncBrazoDer;
+            abuelaRotBrazoIzq += abuelaIncBrazoIzq;
+            abuelaRotPiernaDer += abuelaIncPiernaDer;
+            abuelaRotPiernaIzq += abuelaIncPiernaIzq;
+            i_curr_steps_abuela++;
         }
     }
 
@@ -421,6 +505,13 @@ int main() {
     Model BailarinBrazoIzq("resources/objects/Bailarin/BrazoIzq.obj");
     Model BailarinPiernaDer("resources/objects/Bailarin/PiernaDer.obj");
     Model BailarinPiernaIzq("resources/objects/Bailarin/PiernaIzq.obj");
+    // Modelos articulados para KeyFrames 2 (Abuela)
+    Model AbuelaTorso("resources/objects/Abuela/AbuelaTorso.obj");
+    Model AbuelaCabeza("resources/objects/Abuela/AbuelaCabeza.obj");
+    Model AbuelaBrazoDer("resources/objects/Abuela/AbuelaBrazoDer.obj");
+    Model AbuelaBrazoIzq("resources/objects/Abuela/AbuelaBrazoIzq.obj");
+    Model AbuelaPiernaDer("resources/objects/Abuela/AbuelaPiernaDer.obj");
+    Model AbuelaPiernaIzq("resources/objects/Abuela/AbuelaPiernaIzq.obj");
 
     // Precarga de la coreografía (posX, posY, posZ, giroTorso, cabeza, brazoDer, brazoIzq, piernaDer, piernaIzq)
     KeyFrame[0] = { 0.0f,  0.0f,   0.0f,   0.0f,   0.0f,    0.0f,    0.0f,   0.0f,   0.0f };
@@ -432,6 +523,15 @@ int main() {
     KeyFrame[6] = { 25.0f,  8.0f,   0.0f,  20.0f,   8.0f,   45.0f,  -95.0f,  35.0f, -25.0f };
     KeyFrame[7] = { 0.0f, 18.0f,  15.0f, 180.0f,   0.0f, -120.0f, -120.0f,  15.0f, -15.0f };
     KeyFrame[8] = { 0.0f,  0.0f,   0.0f, 360.0f,   0.0f,    0.0f,    0.0f,   0.0f,   0.0f };
+
+    // Precarga de movimientos de la abuela (saludo y balanceo junto a la ofrenda)
+    KeyFrameAbuela[0] = { 0.0f, 0.0f,  0.0f,   0.0f,   0.0f,    0.0f,   0.0f,   0.0f,   0.0f };
+    KeyFrameAbuela[1] = { 0.0f, 2.0f,  0.0f, -10.0f,  10.0f, -125.0f, -25.0f,  10.0f, -10.0f };
+    KeyFrameAbuela[2] = { 0.0f, 0.0f,  0.0f,  -5.0f,  -8.0f,  -95.0f, -35.0f,   0.0f,   0.0f };
+    KeyFrameAbuela[3] = { 0.0f, 2.0f,  0.0f, -12.0f,  10.0f, -130.0f, -20.0f, -10.0f,  10.0f };
+    KeyFrameAbuela[4] = { -8.0f, 0.0f, 10.0f,  15.0f,  -6.0f,  -45.0f, -85.0f,  15.0f, -15.0f };
+    KeyFrameAbuela[5] = { 0.0f, 2.0f,  0.0f,   5.0f,   8.0f,  -90.0f, -40.0f,   0.0f,   0.0f };
+    KeyFrameAbuela[6] = { 0.0f, 0.0f,  0.0f,   0.0f,   0.0f,    0.0f,   0.0f,   0.0f,   0.0f };
 
     for (int i = 0; i < MAX_FRAMES; i++) {
         KeyFrame[i].posX = 0;
@@ -808,6 +908,55 @@ int main() {
         modelOp = glm::scale(modelOp, glm::vec3(escalaBailarin));
         staticShader.setMat4("model", modelOp);
         BailarinPiernaIzq.Draw(staticShader);
+
+        // ------------------------------------------------------------------
+        // Personaje articulado 2: Abuela junto a la ofrenda (Tecla O)
+        // ------------------------------------------------------------------
+        glm::mat4 modelTempAbuela = glm::mat4(1.0f);
+        float escalaAbuela = 80.0f;
+
+        // 1. Torso
+        modelOp = glm::translate(glm::mat4(1.0f), glm::vec3(240.0f + abuelaPosX, (1.015f * escalaAbuela) + abuelaPosY, 340.0f + abuelaPosZ));
+        modelOp = glm::rotate(modelOp, glm::radians(-30.0f + abuelaGiroTorso), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelTempAbuela = modelOp;
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaTorso.Draw(staticShader);
+
+        // 2. Cabeza
+        modelOp = glm::translate(modelTempAbuela, glm::vec3(0.0f, 0.355f * escalaAbuela, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(abuelaRotCabeza), glm::vec3(0.0f, 0.0f, 1.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaCabeza.Draw(staticShader);
+
+        // 3. Brazo Derecho (+X)
+        modelOp = glm::translate(modelTempAbuela, glm::vec3(0.165f * escalaAbuela, 0.245f * escalaAbuela, -0.02f * escalaAbuela));
+        modelOp = glm::rotate(modelOp, glm::radians(abuelaRotBrazoDer), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaBrazoDer.Draw(staticShader);
+
+        // 4. Brazo Izquierdo (-X)
+        modelOp = glm::translate(modelTempAbuela, glm::vec3(-0.165f * escalaAbuela, 0.245f * escalaAbuela, -0.02f * escalaAbuela));
+        modelOp = glm::rotate(modelOp, glm::radians(abuelaRotBrazoIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaBrazoIzq.Draw(staticShader);
+
+        // 5. Pierna Derecha (juntada al centro para cerrar la falda)
+        modelOp = glm::translate(modelTempAbuela, glm::vec3(0.038f * escalaAbuela, -0.095f * escalaAbuela, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(abuelaRotPiernaDer), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaPiernaDer.Draw(staticShader);
+
+        // 6. Pierna Izquierda (juntada al centro para cerrar la falda)
+        modelOp = glm::translate(modelTempAbuela, glm::vec3(-0.038f * escalaAbuela, -0.095f * escalaAbuela, 0.0f));
+        modelOp = glm::rotate(modelOp, glm::radians(abuelaRotPiernaIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelOp = glm::scale(modelOp, glm::vec3(escalaAbuela));
+        staticShader.setMat4("model", modelOp);
+        AbuelaPiernaIzq.Draw(staticShader);
 
         // Muro trasero 
         for (int i = 0; i < 33; i++) {
@@ -1667,6 +1816,20 @@ void my_input(GLFWwindow* window, int key, int scancode, int action, int mode) {
             play = false;
         }
     }  
+
+    // Iniciar / Detener animación KeyFrames de la Abuela con tecla O
+    if (key == GLFW_KEY_O && action == GLFW_PRESS) {
+        if (!playAbuela && FrameIndexAbuela > 1) {
+            resetElementsAbuela();
+            interpolationAbuela();
+            playAbuela = true;
+            playIndexAbuela = 0;
+            i_curr_steps_abuela = 0;
+        }
+        else {
+            playAbuela = false;
+        }
+    }
 
 
     if (key == GLFW_KEY_B && action == GLFW_PRESS) {
